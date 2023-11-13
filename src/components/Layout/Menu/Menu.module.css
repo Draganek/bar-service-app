@@ -1,0 +1,35 @@
+.menu {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.menuItem {
+  display: inline-block;
+  margin-right: 10px;
+  margin-left: 10px;
+  font-size: 18px;
+}
+
+.menuItem a {
+  color: rgb(212, 212, 212);
+}
+
+.menuRight {
+  float: right;
+}
+
+.menuItemRight {
+  margin-left: left;
+}
+
+.menuItemActive {
+  text-decoration: underline;
+  color: white;
+}
+
+.menuContainer {
+  border: 1px solid #cdcdcd;
+  margin: 10px 0;
+}
