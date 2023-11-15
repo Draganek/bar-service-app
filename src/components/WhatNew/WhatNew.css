@@ -1,0 +1,7 @@
+.carousel-inner {
+    transition: transform 0.6s ease-in-out; /* Dodaj płynną animację przejścia */
+  }
+  
+  .carousel-item {
+    transition: transform 0.6s ease-in-out; /* Dodaj płynną animację przejścia */
+  }

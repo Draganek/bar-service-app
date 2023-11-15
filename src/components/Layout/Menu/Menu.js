@@ -1,55 +1,37 @@
-import React, { useState } from "react";
+import React from "react";
 import style from "./Menu.module.css";
-
+import useAuth from "../../../hooks/useAuth";
+import { NavLink } from "react-router-dom";
 
 function Menu() {
-  const [auth, setAuth] = useState(true);
+  const [auth, setAuth] = useAuth();
 
+  const logout = (e) => {
+    e.preventDefault();
+    setAuth(false);
+  };
   return (
     <div
       className={`${style.menuContainer} breadcrumb bg-dark justify-content-between`}
     >
       <ul className={`${style.menu}`}>
         <li className={style.menuItem}>
-          <a to="/" exact activeClassName={style.menuItemActive}>
+          <NavLink to="/" exact activeClassName={style.menuItemActive}>
             Home
-          </a>
+          </NavLink>
         </li>
-        <li className={style.menuItem}>
-          <a to="/News" exact activeClassName={style.menuItemActive}>
-            News
-          </a>
-        </li>
-      </ul>
-      <ul className={`${style.menu}`}>
-        {auth ? (
-          <>
-            <li className={`${style.menuItem}`}>
-              <a to="/profil" activeClassName={style.menuItemActive}>
-                Mój profil
-              </a>
-            </li>
-            <li className={`${style.menuItem}`}>
-              <a href="#" >
-                Wyloguj
-              </a>
-            </li>
-          </>
-        ) : (
-          <>
             <li className={style.menuItem}>
-              <a activeClassName={style.menuItemActive} to="/rejestracja">
+              <NavLink activeClassName={style.menuItemActive} to="/rejestracja">
                 Register
-              </a>
+              </NavLink>
             </li>
+
             <li className={style.menuItem}>
-              <a activeClassName={style.menuItemActive} to="/zaloguj">
+              <NavLink activeClassName={style.menuItemActive} to="/zaloguj">
                 log in
-              </a>
+              </NavLink>
             </li>
-          </>
-        )}
-      </ul>
+          </ul>
     </div>
   );
 }
