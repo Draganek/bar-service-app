@@ -28,6 +28,7 @@ export default function Login(props) {
         email: res.data.email,
         token: res.data.idToken,
         userId: res.data.localId,
+        name: res.data.displayName
       });
       history.push("/");
     } catch (ex) {

@@ -1,7 +1,7 @@
 import axios from "../../../../axios";
 import { useHistory } from 'react-router-dom';
 import useAuth from "../../../../hooks/useAuth";
-import HotelForm from "../DrinkForm"
+import DrinkForm from "../DrinkForm/DrinkForm"
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 
@@ -33,7 +33,7 @@ const EditDrink = (props) => {
             <div className="card-body">
 
                 <p className="text-muted">Uzupełnij dane koktajlu</p>
-                <HotelForm
+                <DrinkForm
                     drink={drink}
                     buttonText="Zapisz edycje"
                     onSubmit={submit} />

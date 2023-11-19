@@ -6,6 +6,7 @@ import useAuth from "../../../hooks/useAuth";
 import ActualDate from "../../../components/ActualDate/ActualDate";
 import LoadingButton from "../../../UI/LoadingButton/LoadingButton";
 import LoadingIcon from "../../../UI/LoadingIcon/LoadingIcon";
+import ActualTime from "../../../components/ActualTime/ActualTime"
 
 export default function Bills() {
   const [loading, setLoading] = useState(true);
@@ -35,7 +36,8 @@ export default function Bills() {
     setLoading(true)
     await axios.post(`/bills.json?auth=${auth.token}`, {
       status: 1,
-      start: ActualDate(),
+      date: ActualDate(),
+      startTime: ActualTime(),
       price: 0,
       user_id: auth.userId,
     });
@@ -52,7 +54,7 @@ export default function Bills() {
             <tr>
               <th>Status</th>
               <th>Data</th>
-              <th>Ilość produktów</th>
+              <th>Produkty</th>
               <th>Suma</th>
               <th>Opcje</th>
             </tr>
@@ -69,7 +71,7 @@ export default function Bills() {
                     </span>
                   )}
                 </td>
-                <td>{bill.start}</td>
+                <td>{bill.date}</td>
                 <td>{bill.items ? (bill.items.length) : 0}</td>
                 <td>
                   {bill.items ? (bill.items.reduce((total, item) => total + Number(item.price), 0)) : 0}zł

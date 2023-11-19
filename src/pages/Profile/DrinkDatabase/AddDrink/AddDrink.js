@@ -1,7 +1,7 @@
 import axios from "../../../../axios";
 import { useHistory } from 'react-router-dom';
 import useAuth from "../../../../hooks/useAuth";
-import HotelForm from "../DrinkForm"
+import DrinkForm from "../DrinkForm/DrinkForm";
 
 const AddDrink = (props) => {
     const history = useHistory();
@@ -19,7 +19,7 @@ const AddDrink = (props) => {
             <div className="card-body">
 
                 <p className="text-muted">Uzupełnij dane koktajlu</p>
-                <HotelForm
+                <DrinkForm
                     buttonText="Zapisz drink"
                     onSubmit={submit} />
             </div>

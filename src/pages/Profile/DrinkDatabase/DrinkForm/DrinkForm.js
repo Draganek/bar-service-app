@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import useAuth from "../../../hooks/useAuth";
-import Input from "../../../components/Input/Input";
-import { validate } from "../../../helpers/validations";
-import LoadingButton from "../../../UI/LoadingButton/LoadingButton";
+import useAuth from "../../../../hooks/useAuth";
+import Input from "../../../../components/Input/Input";
+import { validate } from "../../../../helpers/validations";
+import LoadingButton from "../../../../UI/LoadingButton/LoadingButton";
 
 const DrinkForm = (props) => {
   const [auth] = useAuth();

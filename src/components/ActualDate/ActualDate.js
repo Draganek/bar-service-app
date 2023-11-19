@@ -1,5 +1,3 @@
-import React from "react";
-
 function ActualDate(props) {
   const now = new Date();
   const day = now.getDate();

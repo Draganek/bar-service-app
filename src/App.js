@@ -13,6 +13,12 @@ import Login from './pages/Auth/Login/Login';
 import ErrorBoundary from './hoc/ErrorBoundary';
 import Register from './pages/Auth/Register/Register';
 import AuthenticatedRoute from './hoc/AuthenticatedRoute/AuthenticatedRoute';
+import BillDetails from './pages/Profile/Bills/BillDetails/BillDetails';
+import AddDrink from './pages/Profile/DrinkDatabase/AddDrink/AddDrink';
+import EditDrink from './pages/Profile/DrinkDatabase/EditDrink/EditDrink'
+import DrinkInfo from './pages/Drinks/DrinkInfo/DrinkInfo';
+import Drinks from './pages/Drinks/Drinks';
+import News from './pages/News/News';
 
 const Profile = lazy(() => import('./pages/Profile/Profile'));
 
@@ -27,11 +33,18 @@ function App() {
     <ErrorBoundary>
       <Suspense fallback={<p>Ładowanie...</p>}>
         <Switch>
-        <AuthenticatedRoute path="/profil" component={Profile} />
+          <AuthenticatedRoute path="/profil/baza_drinkow/edytuj/:id" component={EditDrink} />
+          <AuthenticatedRoute path="/profil/baza_drinkow/dodaj" component={AddDrink} />
+          <AuthenticatedRoute path="/profil/bills/show/:id" component={BillDetails} />
+          <AuthenticatedRoute path="/profil" component={Profile} />
+          <Route path="/drinks/show/:id" component={DrinkInfo} />
+          <Route path="/drinks" component={Drinks} />
           <Route path="/zaloguj" component={Login} />
           <Route path="/rejestracja" component={Register} />
+          <Route path="/news" component={News} />
           <Route path="/" exact component={Home} />
           <Route component={NotFound} />
+
         </Switch>
         </Suspense>
     </ErrorBoundary>

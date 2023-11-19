@@ -22,6 +22,16 @@ const BillDetails = () => {
         <tr key={id}>
           <th scope="row">{id + 1}</th>
           <td>{product.name}</td>
+          {bill.status === "1" ? (
+            <td className="text-success">
+              <b>Zaakceptowany</b>
+            </td>
+          ) : (
+            <td className="text-warning">
+              <b>Oczekujący</b>
+            </td>
+          )}
+
           <td>{product.price}zł</td>
         </tr>
       ));
@@ -36,26 +46,35 @@ const BillDetails = () => {
     <div className="container mt-4">
       <div className="card">
         <div className="card-header">
-          <h4 className="mb-0">Rachunek za zamówienia</h4>
-          <a>Data rozpoczęcia: {bill.start}r</a>
-          {bill.finish ? <div>Data zakończenia: {bill.finish}r</div> : null}
-          {
-            <div>
-              Status rachunku:{" "}
-              {parseInt(bill.status) === 1 ? (
-                <span className="badge bg-success text-light">Otwarty</span>
-              ) : (
-                <span className="badge bg-secondary text-light">Zamknięty</span>
-              )}
-            </div>
-          }
+          <h3 className="mb-2 card-header">Rachunek za zamówienia</h3>
+          <div class="card">
+            <ul class="list-group ">
+              <li class="list-group-item">Data: {bill.date}r</li>
+              <li class="list-group-item">Rozpoczęcie {bill.startTime}</li>
+              {bill.endTime ? (
+                <li class="list-group-item">Zakończenie: {bill.endTime}</li>
+              ) : null}
+              <li class="list-group-item">
+                {" "}
+                Status rachunku:{" "}
+                {parseInt(bill.status) === 1 ? (
+                  <span className="badge bg-success text-light">Otwarty</span>
+                ) : (
+                  <span className="badge bg-secondary text-light">
+                    Zamknięty
+                  </span>
+                )}
+              </li>
+            </ul>
+          </div>
         </div>
         <div className="card-body">
-          <table className="table">
+          <table className="table ">
             <thead>
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Produkt</th>
+                <th scope="col">Status</th>
                 <th scope="col">Cena</th>
               </tr>
             </thead>
@@ -63,12 +82,12 @@ const BillDetails = () => {
           </table>
         </div>
         <div className="card-footer">
-          <strong>
-            Suma:{" "}
+          <span style={{fontSize: "1.2rem"}}>
+            <b>Suma:{" "}</b>
             {bill.items &&
               bill.items.reduce((total, item) => total + Number(item.price), 0)}
             zł
-          </strong>
+          </span>
         </div>
       </div>
     </div>

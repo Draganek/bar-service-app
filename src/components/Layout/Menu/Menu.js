@@ -22,17 +22,16 @@ function Menu() {
         </li>
 
         <li className={style.menuItem}>
-          <NavLink to="/drinks" exact activeClassName={style.menuItemActive}>
+          <NavLink to="/drinks" activeClassName={style.menuItemActive}>
             Drinki
           </NavLink>
         </li>
 
         <li className={style.menuItem}>
-          <NavLink to="/news" exact activeClassName={style.menuItemActive}>
+          <NavLink to="/news" activeClassName={style.menuItemActive}>
             News
           </NavLink>
         </li>
-
       </ul>
       <ul className={`${style.menu}`}>
         {auth ? (
@@ -60,7 +59,7 @@ function Menu() {
             <li className={style.menuItem}>
               <NavLink activeClassName={style.menuItemActive} to="/zaloguj">
                 log in
-              </NavLink> 
+              </NavLink>
             </li>
           </>
         )}

@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 import useWebsiteTitle from "../../hooks/useWebsiteTitle";
 import LoadingIcon from "../../UI/LoadingIcon/LoadingIcon";
 import WhatNew from "../../components/WhatNew/WhatNew";
@@ -19,7 +19,7 @@ export default function Home(props) {
   ) : (
     <>
       {auth && (
-        <h5 className="text-right">Witaj! <span class="badge badge-secondary">{auth.email}</span></h5>
+        <h5 className="text-right">Witaj! <span class="badge badge-secondary">{auth.name}</span></h5>
       )}
       <WhatNew />
       <div className="pt-2">
