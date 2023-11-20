@@ -15,7 +15,9 @@ export default function AllDrinks(props) {
   const fetchDrinks = async () => {
     try {
       const res = await axios.get("/cocktails.json");
-      const newData = objectToArrayWithId(res.data)
+      const newData = objectToArrayWithId(res.data).filter(
+        (cocktail) => cocktail.status === "1"
+      );
       setCoctails(newData);
     } catch (ex) {
       alert(JSON.stringify(ex.response));

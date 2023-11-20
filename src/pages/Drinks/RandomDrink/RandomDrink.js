@@ -1,9 +1,7 @@
-import useAuth from "../../../hooks/useAuth";
 import { useState, useEffect } from "react";
 import axios from "../../../axios";
 import { objectToArrayWithId } from "../../../helpers/objects";
 import LoadingIcon from "../../../UI/LoadingIcon/LoadingIcon";
-import { useHistory } from "react-router-dom";
 import randomDrinkImage from "../../../assets/images/random.jpg";
 import DrinkCard from "../DrinkCard/DrinkCard";
 
@@ -18,7 +16,8 @@ export default function RandomDrink(props) {
   const fetchDrinks = async () => {
     try {
       const res = await axios.get("/cocktails.json");
-      const newData = objectToArrayWithId(res.data);
+      const newData = objectToArrayWithId(res.data).filter(
+        (cocktail) => cocktail.status === "1");
       setCoctails(newData);
       setLoading(false);
     } catch (ex) {
@@ -100,12 +99,12 @@ export default function RandomDrink(props) {
       </div>
 
       <div className="card-header">
-        <h4 className="text-center">Losuj drinka!</h4>
+        <h4 className="text-center">Losuj pozycje!</h4>
       </div>
 
       <ul class="list-group list-group-flush">
         <li class="list-group-item text-center">
-          Naciśnij przycisk, żeby wylosować drinka
+          Naciśnij przycisk, żeby rozpocząć losowanie
         </li>
       </ul>
       <div class="card-body">

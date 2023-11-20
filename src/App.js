@@ -19,6 +19,8 @@ import EditDrink from './pages/Profile/DrinkDatabase/EditDrink/EditDrink'
 import DrinkInfo from './pages/Drinks/DrinkInfo/DrinkInfo';
 import Drinks from './pages/Drinks/Drinks';
 import News from './pages/News/News';
+import Services from './pages/Services/Services';
+import Admin from "./pages/Services/Admin/Admin"
 
 const Profile = lazy(() => import('./pages/Profile/Profile'));
 
@@ -37,6 +39,8 @@ function App() {
           <AuthenticatedRoute path="/profil/baza_drinkow/dodaj" component={AddDrink} />
           <AuthenticatedRoute path="/profil/bills/show/:id" component={BillDetails} />
           <AuthenticatedRoute path="/profil" component={Profile} />
+          <AuthenticatedRoute path="/services/admin" component={Admin} />
+          <AuthenticatedRoute path="/services" component={Services} />
           <Route path="/drinks/show/:id" component={DrinkInfo} />
           <Route path="/drinks" component={Drinks} />
           <Route path="/zaloguj" component={Login} />

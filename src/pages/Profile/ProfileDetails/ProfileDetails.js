@@ -26,16 +26,12 @@ export default function ProfileDetails() {
         idToken: auth.token,
         displayName: name,
         returnSecureToken: true,
-        photoUrl: "2",
-        "authDomain": 1,
       };
       if (password) {
         data.password = password;
       }
 
       const res = await axios.post(`accounts:update`, data);
-      const res2 = await axios.post(`accounts:lookup`, data);
-      alert(JSON.stringify(res2.data));
 
       setAuth({
         email: res.data.email,
@@ -51,7 +47,6 @@ export default function ProfileDetails() {
       setLoading(false);
       setsubmitInfo("No i się wyjebało");
       setMsg("danger");
-      console.log(ex.response);
     }
   };
 

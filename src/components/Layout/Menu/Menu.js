@@ -4,12 +4,9 @@ import useAuth from "../../../hooks/useAuth";
 import { NavLink } from "react-router-dom";
 
 function Menu() {
-  const [auth, setAuth] = useAuth();
+  const [auth] = useAuth();
 
-  const logout = (e) => {
-    e.preventDefault();
-    setAuth(false);
-  };
+
   return (
     <div
       className={`${style.menuContainer} breadcrumb bg-dark justify-content-between`}
@@ -37,15 +34,15 @@ function Menu() {
         {auth ? (
           <>
             <li className={`${style.menuItem}`}>
-              <NavLink to="/profil" activeClassName={style.menuItemActive}>
-                Mój profil
+              <NavLink to="/services" activeClassName={style.menuItemActive}>
+                Usługi
               </NavLink>
             </li>
 
             <li className={`${style.menuItem}`}>
-              <a href="#" onClick={logout}>
-                Wyloguj
-              </a>
+              <NavLink to="/profil" activeClassName={style.menuItemActive}>
+                Mój profil
+              </NavLink>
             </li>
           </>
         ) : (
