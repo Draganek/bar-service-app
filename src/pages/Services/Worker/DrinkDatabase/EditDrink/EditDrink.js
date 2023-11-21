@@ -1,7 +1,7 @@
-import axios from "../../../../axios";
+import axios from "../../../../../axios";
 import { useHistory } from 'react-router-dom';
-import useAuth from "../../../../hooks/useAuth";
-import DrinkForm from "../DrinkForm/DrinkForm"
+import useAuth from "../../../../../hooks/useAuth";
+import DrinkForm from "../../../../Services/Worker/DrinkDatabase/DrinkForm/DrinkForm"
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 
@@ -13,7 +13,7 @@ const EditDrink = (props) => {
 
     const submit = async form => {
         await axios.patch(`/cocktails/${id}.json?auth=${auth.token}`, form);
-        history.push('/profil/baza_drinkow')
+        history.push('/services')
     }
 
     const fetchHotel = async () => {

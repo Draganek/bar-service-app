@@ -1,6 +1,6 @@
-import axios from "../../../../axios";
+import axios from "../../../../../axios";
 import { useHistory } from 'react-router-dom';
-import useAuth from "../../../../hooks/useAuth";
+import useAuth from "../../../../../hooks/useAuth";
 import DrinkForm from "../DrinkForm/DrinkForm";
 
 const AddDrink = (props) => {
@@ -10,7 +10,7 @@ const AddDrink = (props) => {
 
     const submit = async form => {
         await axios.post(`/cocktails.json?auth=${auth.token}`, form);
-        history.push('/profil/hotele')
+        history.push('/services')
     }
 
     return (

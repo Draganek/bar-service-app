@@ -36,6 +36,7 @@ export default function Bills() {
     setLoading(true)
     await axios.post(`/bills.json?auth=${auth.token}`, {
       status: 1,
+      name: auth.name,
       date: ActualDate(),
       startTime: ActualTime(),
       price: 0,

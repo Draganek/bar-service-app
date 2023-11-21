@@ -1,8 +1,6 @@
-import DrinkDatabase from "./DrinkDatabase/DrinkDatabase";
 import ProfileDetails from "./ProfileDetails/ProfileDetails";
 import Bills from "./Bills/Bills"
 import { Route, Switch, NavLink, useRouteMatch } from 'react-router-dom'
-import Approvals from "./Approvals/Approvals";
 import style from "./Profile.module.css"
 import useAuth from "../../hooks/useAuth";
 

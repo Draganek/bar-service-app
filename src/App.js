@@ -14,13 +14,14 @@ import ErrorBoundary from './hoc/ErrorBoundary';
 import Register from './pages/Auth/Register/Register';
 import AuthenticatedRoute from './hoc/AuthenticatedRoute/AuthenticatedRoute';
 import BillDetails from './pages/Profile/Bills/BillDetails/BillDetails';
-import AddDrink from './pages/Profile/DrinkDatabase/AddDrink/AddDrink';
-import EditDrink from './pages/Profile/DrinkDatabase/EditDrink/EditDrink'
+import AddDrink from './pages/Services/Worker/DrinkDatabase/AddDrink/AddDrink';
+import EditDrink from './pages/Services/Worker/DrinkDatabase/EditDrink/EditDrink'
 import DrinkInfo from './pages/Drinks/DrinkInfo/DrinkInfo';
 import Drinks from './pages/Drinks/Drinks';
 import News from './pages/News/News';
 import Services from './pages/Services/Services';
 import Admin from "./pages/Services/Admin/Admin"
+import StafRoute from './hoc/StafRoute/StafRoute';
 
 const Profile = lazy(() => import('./pages/Profile/Profile'));
 
@@ -35,12 +36,13 @@ function App() {
     <ErrorBoundary>
       <Suspense fallback={<p>Ładowanie...</p>}>
         <Switch>
-          <AuthenticatedRoute path="/profil/baza_drinkow/edytuj/:id" component={EditDrink} />
-          <AuthenticatedRoute path="/profil/baza_drinkow/dodaj" component={AddDrink} />
+
+          <StafRoute path="/services/admin" component={Admin} perm={2} />
+          <StafRoute path="/services/edytuj/:id" component={EditDrink} perm={1} />
+          <StafRoute path="/services/dodaj" component={AddDrink} perm={1} />
+          <StafRoute path="/services" component={Services} perm={1} />
           <AuthenticatedRoute path="/profil/bills/show/:id" component={BillDetails} />
           <AuthenticatedRoute path="/profil" component={Profile} />
-          <AuthenticatedRoute path="/services/admin" component={Admin} />
-          <AuthenticatedRoute path="/services" component={Services} />
           <Route path="/drinks/show/:id" component={DrinkInfo} />
           <Route path="/drinks" component={Drinks} />
           <Route path="/zaloguj" component={Login} />
@@ -50,7 +52,7 @@ function App() {
           <Route component={NotFound} />
 
         </Switch>
-        </Suspense>
+      </Suspense>
     </ErrorBoundary>
   );
 
@@ -61,17 +63,17 @@ function App() {
         login: (user) => dispatch({ type: 'login', user }),
         logout: () => dispatch({ type: 'logout' })
       }}>
-          <ReducerContext.Provider value={{
-            state: state,
-            dispatch: dispatch
-          }}>
+        <ReducerContext.Provider value={{
+          state: state,
+          dispatch: dispatch
+        }}>
 
-            <Layout
-              menu={menu}
-              content={content}
-              footer={footer}
-            />
-          </ReducerContext.Provider>
+          <Layout
+            menu={menu}
+            content={content}
+            footer={footer}
+          />
+        </ReducerContext.Provider>
       </AuthContext.Provider>
     </Router>
   );

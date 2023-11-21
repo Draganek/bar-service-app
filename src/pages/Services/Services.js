@@ -1,14 +1,13 @@
-import DrinkDatabase from "../Profile/DrinkDatabase/DrinkDatabase";
+import DrinkDatabase from "./Worker/DrinkDatabase/DrinkDatabase";
 import { Route, Switch, NavLink, useRouteMatch } from 'react-router-dom'
-import Approvals from "../Profile/Approvals/Approvals";
+import Approvals from "../Services/Worker/Approvals/Approvals";
 import useAuth from "../../hooks/useAuth";
 
 export default function Services(props) {
     const { path, url } = useRouteMatch();
-    const [auth, setAuth] = useAuth();
+    const [auth] = useAuth();
 
     const isNavLinkActive = (match, location) => {
-        // Własna logika sprawdzania aktywności
         return url === "/services";
       };
 
@@ -22,9 +21,10 @@ export default function Services(props) {
                     <li class="nav-item">
                         <NavLink className="nav-link" isActive={isNavLinkActive} to={`/services`}>Pracownik</NavLink>
                     </li>
-                    <li class="nav-item">
+                    { auth.perm && Number(auth.perm) >= 2 && (<li class="nav-item">
                         <NavLink className="nav-link" to={`/services/admin`}>Administrator</NavLink>
-                    </li>
+                    </li>) }
+                    
 
                 </ul>
             </div>

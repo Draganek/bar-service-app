@@ -33,11 +33,12 @@ function Menu() {
       <ul className={`${style.menu}`}>
         {auth ? (
           <>
-            <li className={`${style.menuItem}`}>
+            { auth.perm && Number(auth.perm) >= 0 && (<li className={`${style.menuItem}`}>
               <NavLink to="/services" activeClassName={style.menuItemActive}>
                 Usługi
               </NavLink>
-            </li>
+            </li>)}
+            
 
             <li className={`${style.menuItem}`}>
               <NavLink to="/profil" activeClassName={style.menuItemActive}>

@@ -2,7 +2,9 @@ import { useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import { useHistory } from "react-router-dom";
 import LoadingButton from "../../../UI/LoadingButton/LoadingButton";
-import axios from "../../../axios-auth";
+import axiosAuth from "../../../axios-auth";
+import axios from "../../../axios";
+import { objectToArrayWithId } from "../../../helpers/objects";
 
 export default function Login(props) {
   const [auth, setAuth] = useAuth();
@@ -19,18 +21,31 @@ export default function Login(props) {
     setLoading(true);
 
     try {
-      const res = await axios.post("accounts:signInWithPassword", {
+      const res = await axiosAuth.post("accounts:signInWithPassword", {
         email,
         password,
         returnSecureToken: true,
       });
-      setAuth({
+
+      const search = await axios.get(`/permissions.json?auth=${res.data.idToken}`);
+      const userExist = objectToArrayWithId(search.data).filter(
+        (perm) => perm.user === res.data.localId
+      );
+
+      const data = {
         email: res.data.email,
         token: res.data.idToken,
         userId: res.data.localId,
-        name: res.data.displayName
-      });
+        name: res.data.displayName,
+      }
+
+      if(userExist.length !== 0) {
+        data.perm = userExist[0].permission
+      }
+
+      setAuth(data);
       history.push("/");
+
     } catch (ex) {
       setError(ex.response.data.error.message);
       setLoading(false);
@@ -45,7 +60,7 @@ export default function Login(props) {
     <div className="card">
       <h2 className="card-header">Logowanie</h2>
       <div className="card-body">
-      <p className="text-muted">Uzupełnij dane logowania</p>
+        <p className="text-muted">Uzupełnij dane logowania</p>
         {valid === false ? (
           <div className="alert alert-danger">Niepoprawne dane logowania</div>
         ) : null}

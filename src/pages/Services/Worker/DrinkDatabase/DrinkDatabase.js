@@ -1,10 +1,10 @@
-import axios from "../../../axios";
+import axios from "../../../../axios";
 import { useEffect, useState } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
-import { objectToArrayWithId } from "../../../helpers/objects";
-import useAuth from "../../../hooks/useAuth";
-import ModalNotification from "../../../components/ModalNotification/ModalNotification";
-import LoadingIcon from "../../../UI/LoadingIcon/LoadingIcon";
+import { objectToArrayWithId } from "../../../../helpers/objects";
+import useAuth from "../../../../hooks/useAuth";
+import ModalNotification from "../../../../components/ModalNotification/ModalNotification";
+import LoadingIcon from "../../../../UI/LoadingIcon/LoadingIcon";
 
 export default function DrinkDatabase() {
   const [auth] = useAuth();
@@ -65,7 +65,7 @@ export default function DrinkDatabase() {
                 <td>{cocktail.price}zł</td>
                 <td>
                   <Link
-                    to={`/profil/baza_drinkow/edytuj/${cocktail.id}`}
+                    to={`/services/edytuj/${cocktail.id}`}
                     className="btn btn-warning mr-1"
                   >
                     Edytuj

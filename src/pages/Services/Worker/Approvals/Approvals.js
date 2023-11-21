@@ -1,10 +1,10 @@
-import axios from "../../../axios";
+import axios from "../../../../axios";
 import { useEffect, useState } from "react";
-import { objectToArrayWithId } from "../../../helpers/objects";
-import useAuth from "../../../hooks/useAuth";
-import LoadingIcon from "../../../UI/LoadingIcon/LoadingIcon";
-import ModalNotification from "../../../components/ModalNotification/ModalNotification";
-import ActualTime from "../../../components/ActualTime/ActualTime";
+import { objectToArrayWithId } from "../../../../helpers/objects";
+import useAuth from "../../../../hooks/useAuth";
+import LoadingIcon from "../../../../UI/LoadingIcon/LoadingIcon";
+import ModalNotification from "../../../../components/ModalNotification/ModalNotification";
+import ActualTime from "../../../../components/ActualTime/ActualTime";
 
 export default function Approvals() {
   const [loading, setLoading] = useState(true);
@@ -69,7 +69,7 @@ export default function Approvals() {
                     </span>
                   )}
                 </td>
-                <td>{bill.start}</td>
+                <td>{bill.date}</td>
                 <td
                   style={{
                     wordWrap: "break-word",
