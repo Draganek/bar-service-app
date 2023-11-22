@@ -22,9 +22,9 @@ const BillDetails = () => {
         <tr key={id}>
           <th scope="row">{id + 1}</th>
           <td>{product.name}</td>
-          {bill.status === "1" ? (
+          {product.status === "1" ? (
             <td className="text-success">
-              <b>Zaakceptowany</b>
+              <b>Wydany</b>
             </td>
           ) : (
             <td className="text-warning">

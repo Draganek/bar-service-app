@@ -50,7 +50,7 @@ export default function DrinkInfo(props) {
       const items = { ...activeBill.items };
       const itemsArray = Object.values(items);
 
-      itemsArray.push({ name: cocktail.name, price: cocktail.price, status: '0' });
+      itemsArray.push({ name: cocktail.name, price: cocktail.price, status: '0', drinkId: id, user: auth.userId });
 
       try {
         await axios.patch(`/bills/${activeBill.id}.json?auth=${auth.token}`, {
