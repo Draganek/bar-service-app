@@ -81,7 +81,7 @@ export default function Approvals() {
                 </td>
                 <td>
                   {bill.items
-                    ? bill.items.reduce(
+                    ? objectToArrayWithId(bill.items).reduce(
                         (total, item) => total + Number(item.price),
                         0
                       )

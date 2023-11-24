@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../../../axios";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { objectToArrayWithId } from "../../../../helpers/objects";
 
 const BillDetails = () => {
   const { id } = useParams();
@@ -18,7 +19,7 @@ const BillDetails = () => {
 
   const renderBill = (props) => {
     if (bill.items) {
-      return bill.items.map((product, id) => (
+      return objectToArrayWithId(bill.items).map((product, id) => (
         <tr key={id}>
           <th scope="row">{id + 1}</th>
           <td>{product.name}</td>
@@ -85,7 +86,7 @@ const BillDetails = () => {
           <span style={{fontSize: "1.2rem"}}>
             <b>Suma:{" "}</b>
             {bill.items &&
-              bill.items.reduce((total, item) => total + Number(item.price), 0)}
+              objectToArrayWithId(bill.items).reduce((total, item) => total + Number(item.price), 0)}
             zł
           </span>
         </div>

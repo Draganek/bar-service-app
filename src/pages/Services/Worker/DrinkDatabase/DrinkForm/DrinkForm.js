@@ -6,7 +6,6 @@ import LoadingButton from "../../../../../UI/LoadingButton/LoadingButton";
 
 const DrinkForm = (props) => {
   const [auth] = useAuth();
-  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     name: {
       value: "",
@@ -78,7 +77,6 @@ const DrinkForm = (props) => {
 
   const submit = async (e) => {
     e.preventDefault();
-    setLoading(true);
 
     try {
       props.onSubmit({
@@ -97,9 +95,8 @@ const DrinkForm = (props) => {
         
       });
     } catch (ex) {
-      alert(JSON.stringify(ex));
-      setLoading(false);
     }
+    
   };
 
   const changeHandler = (value, fieldName) => {
@@ -301,7 +298,7 @@ const DrinkForm = (props) => {
       />
 
       <div className="text-right">
-        <LoadingButton loading={loading} className="btn-success">
+        <LoadingButton loading={props.loading} className="btn-success">
           {props.buttonText}
         </LoadingButton>
       </div>

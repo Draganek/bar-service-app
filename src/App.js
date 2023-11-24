@@ -38,8 +38,8 @@ function App() {
         <Switch>
 
           <StafRoute path="/services/admin" component={Admin} perm={2} />
-          <StafRoute path="/services/edytuj/:id" component={EditDrink} perm={1} />
-          <StafRoute path="/services/dodaj" component={AddDrink} perm={1} />
+          <StafRoute path="/services/drinks_database/edytuj/:id" component={EditDrink} perm={1} />
+          <StafRoute path="/services/drinks_database/dodaj" component={AddDrink} perm={1} />
           <StafRoute path="/services" component={Services} perm={1} />
           <AuthenticatedRoute path="/profil/bills/show/:id" component={BillDetails} />
           <AuthenticatedRoute path="/profil" component={Profile} />

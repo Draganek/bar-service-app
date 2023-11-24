@@ -73,9 +73,9 @@ export default function Bills() {
                   )}
                 </td>
                 <td>{bill.date}</td>
-                <td>{bill.items ? (bill.items.length) : 0}</td>
+                <td>{bill.items ? (objectToArrayWithId(bill.items).length) : 0}</td>
                 <td>
-                  {bill.items ? (bill.items.reduce((total, item) => total + Number(item.price), 0)) : 0}zł
+                  {bill.items ? (objectToArrayWithId(bill.items).reduce((total, item) => total + Number(item.price), 0)) : 0}zł
                 </td>
                 <td>
                   <Link

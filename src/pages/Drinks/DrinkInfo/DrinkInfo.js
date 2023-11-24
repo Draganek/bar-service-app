@@ -52,10 +52,9 @@ export default function DrinkInfo(props) {
 
       itemsArray.push({ name: cocktail.name, price: cocktail.price, status: '0', drinkId: id, user: auth.userId });
 
+      const test = { name: cocktail.name, price: cocktail.price, status: '0', drinkId: id, user: auth.userId }
       try {
-        await axios.patch(`/bills/${activeBill.id}.json?auth=${auth.token}`, {
-          items: itemsArray,
-        });
+        await axios.post(`/bills/${activeBill.id}/items.json?auth=${auth.token}`, test);
         setMessage("Pomyślnie dodano drinka do rachunku!");
       } catch (ex) {
         if (ex.data.status === 401) {

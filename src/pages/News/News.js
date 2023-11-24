@@ -1,16 +1,23 @@
 import React, { useState } from 'react';
+import ToastMessage from '../../components/ToastMessage/ToastMessage';
 
 const News = () => {
-  const [selectedOption, setSelectedOption] = useState('Choose an option');
+  const [toastActive, setToastActive] = useState(false);
 
-  const handleOptionSelect = (option) => {
-    setSelectedOption(option);
+  const handleToggleToast = () => {
+    setToastActive(!toastActive);
   };
 
   return (
     <div class="dropdown">
-	  <h1>Tu możliwe że będą newsy</h1>
-	</div>
+      <h1>Tu możliwe że będą newsy</h1>
+
+      <button onClick={handleToggleToast}>Show Toast</button>
+      <ToastMessage
+        isActive={toastActive}
+        onToggle={handleToggleToast}
+      />
+    </div>
   );
 };
 
