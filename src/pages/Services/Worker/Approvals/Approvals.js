@@ -5,12 +5,15 @@ import useAuth from "../../../../hooks/useAuth";
 import LoadingIcon from "../../../../UI/LoadingIcon/LoadingIcon";
 import ModalNotification from "../../../../components/ModalNotification/ModalNotification";
 import ActualTime from "../../../../components/ActualTime/ActualTime";
+import ToastMessage from "../../../../components/ToastMessage/ToastMessage";
 
 export default function Approvals() {
   const [loading, setLoading] = useState(true);
   const [auth] = useAuth();
   const [bills, setBills] = useState([]);
   const [error, setError] = useState("");
+  const [toastActive, setToastActive] = useState(false);
+
 
   const fetchBills = async () => {
     try {
@@ -21,7 +24,7 @@ export default function Approvals() {
       newData.sort((a, b) => b.status - a.status);
       setBills(newData);
     } catch (ex) {
-      alert(JSON.stringify(ex.response));
+      setError(ex.message);
     }
     setLoading(false);
   };
@@ -30,6 +33,10 @@ export default function Approvals() {
     fetchBills();
   }, []);
 
+  const handleToggleToast = () => {
+    setToastActive(!toastActive);
+  };
+
   const handleCloseBill = async (id) => {
     try {
       await axios.patch(`/bills/${id}.json?auth=${auth.token}`, {
@@ -37,7 +44,11 @@ export default function Approvals() {
         endTime: ActualTime(),
       });
     } catch (ex) {
-      setError(ex.response.status);
+      if (ex.response.status === 401) {
+        handleToggleToast();
+      } else {
+        setError(ex.message);
+      }
     }
     fetchBills();
   };
@@ -82,9 +93,9 @@ export default function Approvals() {
                 <td>
                   {bill.items
                     ? objectToArrayWithId(bill.items).reduce(
-                        (total, item) => total + Number(item.price),
-                        0
-                      )
+                      (total, item) => total + Number(item.price),
+                      0
+                    )
                     : 0}
                   zł
                 </td>
@@ -103,7 +114,10 @@ export default function Approvals() {
       ) : (
         <h6>Nie znaleziono żadnego rachunku do zatwierdzenia</h6>
       )}
-      {error && <b className="text-danger">{error === 401 ? "Token użytkownika wygasł. Zaloguj się ponownie" : error}</b>}
+      {error && <span className="alert alert-danger">{error}</span>}
+      {toastActive && (
+        <ToastMessage isActive={toastActive} onToggle={handleToggleToast} />
+      )}
     </div>
   );
 }

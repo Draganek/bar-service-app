@@ -46,22 +46,10 @@ export default function DrinksAprove() {
 
   const handleCloseDrink = async (billId, drinkId) => {
     setLoading(true);
-    let change = true;
-    const bill = bills.filter((bill) => bill.id === id);
-    const newItems = bill[0].items.map((item) => {
-      {
-        if (item.name === name && change && item.status === "0") {
-          item.status = "1";
-          change = false;
-          return item;
-        } else {
-          return item;
-        }
-      }
-    });
+
     try {
-      await axios.patch(`/bills/${id}.json?auth=${auth.token}`, {
-        items: newItems,
+      await axios.patch(`/bills/${billId}/items/${drinkId}.json?auth=${auth.token}`, {
+        status: "1",
       });
     } catch (ex) {
       if (ex.response.status === 401) {
@@ -115,6 +103,7 @@ export default function DrinksAprove() {
                 </td>
                 <td>
                   <ModalNotification
+                    disabled={order.status === '1'}
                     onConfirm={(event) =>
                       handleCloseDrink(order.billId, order.id)
                     }

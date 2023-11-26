@@ -6,10 +6,13 @@ import Input from "../../../../components/Input/Input";
 import { validate } from "../../../../helpers/validations";
 import { objectToArrayWithId } from "../../../../helpers/objects";
 import LoadingIcon from "../../../../UI/LoadingIcon/LoadingIcon";
+import ToastMessage from "../../../../components/ToastMessage/ToastMessage";
 
 export default function SetPermissions() {
     const [auth, setAuth] = useAuth();
     const [message, setMessage] = useState();
+    const [error, setError] = useState("");
+    const [toastActive, setToastActive] = useState(false);
     const [form, setForm] = useState({
         userId: {
             value: "",
@@ -48,7 +51,11 @@ export default function SetPermissions() {
             setMessage({ value: "Pomyślnie nadałeś uprawnienia", type: "alert-success" })
 
         } catch (ex) {
-            setMessage({ value: ex.message, type: "alert-alert" })
+            if (ex.response.status === 401) {
+                handleToggleToast();
+              } else {
+                setError(ex.message);
+              }
         }
         setLoading(false);
     };
@@ -66,13 +73,14 @@ export default function SetPermissions() {
         });
     };
 
+    const handleToggleToast = () => {
+        setToastActive(!toastActive);
+    };
 
-    return (loading ? (<LoadingIcon/>) : (<form onSubmit={submit}>
+    return (loading ? (<LoadingIcon />) : (<form onSubmit={submit}>
         {message && <div class={`alert ${message.type}`} role="alert">
             {message.value}
         </div>}
-
-
         <Input
             label="ID użytkownika"
             value={form.userId.value}
@@ -96,8 +104,17 @@ export default function SetPermissions() {
             showError={form.permission.showError}
         />
 
-        <LoadingButton loading={loading} disabled={form.userId.value.length === 0} className="btn btn-success">
+        
+        <div className="d-flex align-items-stretch">
+        <LoadingButton loading={loading} disabled={form.userId.value.length === 0} style={{height: '2.5rem'}} className="btn btn-success">
             Zapisz uprawnienia
         </LoadingButton>
+        <div className="flex-grow-1">
+        {error && <span className="alert alert-danger">{error}</span>}
+        {toastActive && (
+          <ToastMessage isActive={toastActive} onToggle={handleToggleToast} />
+        )}
+        </div>
+      </div>
     </form>));
 }

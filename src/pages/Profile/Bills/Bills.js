@@ -7,12 +7,15 @@ import ActualDate from "../../../components/ActualDate/ActualDate";
 import LoadingButton from "../../../UI/LoadingButton/LoadingButton";
 import LoadingIcon from "../../../UI/LoadingIcon/LoadingIcon";
 import ActualTime from "../../../components/ActualTime/ActualTime"
+import ToastMessage from "../../../components/ToastMessage/ToastMessage";
 
 export default function Bills() {
   const [loading, setLoading] = useState(true);
   const [auth] = useAuth();
   const { url } = useRouteMatch();
   const [bills, setBills] = useState([]);
+  const [error, setError] = useState("");
+  const [toastActive, setToastActive] = useState(false);
 
   const fetchBills = async () => {
     try {
@@ -34,20 +37,32 @@ export default function Bills() {
 
   const addBillHandler = async () => {
     setLoading(true)
-    await axios.post(`/bills.json?auth=${auth.token}`, {
-      status: 1,
-      name: auth.name,
-      date: ActualDate(),
-      startTime: ActualTime(),
-      price: 0,
-      user_id: auth.userId,
-    });
-    fetchBills();
+    try {
+      await axios.post(`/bills.json?auth=${auth.token}`, {
+        status: 1,
+        name: auth.name,
+        date: ActualDate(),
+        startTime: ActualTime(),
+        price: 0,
+        user_id: auth.userId,
+      });
+      fetchBills();
+    } catch (ex) {
+      if (ex.response.status === 401) {
+        handleToggleToast();
+      } else {
+        setError(ex.message);
+      }
+      setLoading(false)
+    }
+
   };
 
-  
+  const handleToggleToast = () => {
+    setToastActive(!toastActive);
+  };
 
-  return (loading ? <LoadingIcon/> : (
+  return (loading ? <LoadingIcon /> : (
     <div>
       {bills.length ? (
         <table className="table table-bordered">
@@ -98,6 +113,10 @@ export default function Bills() {
         <LoadingButton loading={loading} className="btn btn-primary" onClick={addBillHandler}>
           Otwórz nowy rachunek
         </LoadingButton>
+      )}
+      {error && <span className="alert alert-danger">{error}</span>}
+      {toastActive && (
+        <ToastMessage isActive={toastActive} onToggle={handleToggleToast} />
       )}
     </div>)
   );

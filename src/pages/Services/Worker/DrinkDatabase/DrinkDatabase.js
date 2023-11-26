@@ -5,12 +5,15 @@ import { objectToArrayWithId } from "../../../../helpers/objects";
 import useAuth from "../../../../hooks/useAuth";
 import ModalNotification from "../../../../components/ModalNotification/ModalNotification";
 import LoadingIcon from "../../../../UI/LoadingIcon/LoadingIcon";
+import ToastMessage from "../../../../components/ToastMessage/ToastMessage";
 
 export default function DrinkDatabase() {
   const [auth] = useAuth();
   const { url } = useRouteMatch();
   const [cocktails, setCoctails] = useState([]);
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("");
+  const [toastActive, setToastActive] = useState(false);
 
   const fetchDrinks = async () => {
     try {
@@ -18,7 +21,7 @@ export default function DrinkDatabase() {
       const newData = objectToArrayWithId(res.data)
       setCoctails(newData);
     } catch (ex) {
-      alert(JSON.stringify(ex.message));
+      setError(ex.message);
     }
     setLoading(false)
   };
@@ -28,7 +31,11 @@ export default function DrinkDatabase() {
       await axios.delete(`/cocktails/${id}.json?auth=${auth.token}`);
       setCoctails(cocktails.filter((x) => x.id !== id));
     } catch (ex) {
-      alert(JSON.stringify(ex.response));
+      if (ex.response.status === 401) {
+        handleToggleToast();
+      } else {
+        setError(ex.message);
+      }
     }
   };
 
@@ -37,7 +44,11 @@ export default function DrinkDatabase() {
     fetchDrinks();
   }, []);
 
-  return (loading ? <LoadingIcon/> : (
+  const handleToggleToast = () => {
+    setToastActive(!toastActive);
+  };
+
+  return (loading ? <LoadingIcon /> : (
     <div>
       {cocktails.length > 0 ? (
         <table className="table table-bordered">
@@ -65,7 +76,7 @@ export default function DrinkDatabase() {
                 <td>{cocktail.price}zł</td>
                 <td>
                   <Link
-                    to={`/services/edytuj/${cocktail.id}`}
+                    to={`/services/drinks_database/edytuj/${cocktail.id}`}
                     className="btn btn-warning mr-1"
                   >
                     Edytuj
@@ -84,9 +95,18 @@ export default function DrinkDatabase() {
       ) : (
         <h6>Nie znaleziono drinków :(</h6>
       )}
-      <Link to={`${url}/dodaj`} className="btn btn-primary">
-        Dodaj drink
-      </Link>
+      <div className="d-flex align-items-stretch">
+        <Link to={`${url}/dodaj`} className="btn btn-primary" style={{height: '2.5rem'}}>
+          Dodaj drink
+        </Link>
+        <div className="flex-grow-1">
+        {error && <span className="alert alert-danger">{error}</span>}
+        {toastActive && (
+          <ToastMessage isActive={toastActive} onToggle={handleToggleToast} />
+        )}
+        </div>
+      </div>
+
     </div>)
   );
 }

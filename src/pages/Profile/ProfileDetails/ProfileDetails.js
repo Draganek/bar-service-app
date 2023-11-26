@@ -3,6 +3,7 @@ import LoadingButton from "../../../UI/LoadingButton/LoadingButton";
 import { validateEmail } from "../../../helpers/validations";
 import useAuth from "../../../hooks/useAuth";
 import axios from "../../../axios-auth";
+import ToastMessage from "../../../components/ToastMessage/ToastMessage";
 
 export default function ProfileDetails() {
   const [auth, setAuth] = useAuth();
@@ -10,6 +11,7 @@ export default function ProfileDetails() {
   const [email, setEmail] = useState(auth.email);
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [toastActive, setToastActive] = useState(false);
   const [errors, setErrors] = useState({
     email: "",
     password: "",
@@ -18,7 +20,7 @@ export default function ProfileDetails() {
   const [submitInfo, setsubmitInfo] = useState(null);
   const buttonDisabled = Object.values(errors).filter((x) => x).length;
 
-  const submit = async (e) => { 
+  const submit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
@@ -44,9 +46,14 @@ export default function ProfileDetails() {
       setsubmitInfo("Wow udało się");
       setMsg("success");
     } catch (ex) {
+      if (ex.response.status === 400) {
+        handleToggleToast();
+      } else {
+        setsubmitInfo("No i się wyjebało");
+        setMsg("danger");
+      }
       setLoading(false);
-      setsubmitInfo("No i się wyjebało");
-      setMsg("danger");
+
     }
   };
 
@@ -65,6 +72,10 @@ export default function ProfileDetails() {
       setErrors({ ...errors, password: "Wymagane 4 znaki" });
     }
   }, [password]);
+
+  const handleToggleToast = () => {
+    setToastActive(!toastActive);
+  };
 
   return (
     <form onSubmit={submit}>
@@ -103,9 +114,17 @@ export default function ProfileDetails() {
         />
         <div className="invalid-feedback">{errors.password}</div>
       </div>
-      <LoadingButton loading={loading} disabled={buttonDisabled}>
-        Zapisz
-      </LoadingButton>
+
+      <div className="d-flex align-items-stretch">
+        <LoadingButton loading={loading} disabled={buttonDisabled} style={{ height: '2.5rem' }}>
+          Zapisz
+        </LoadingButton>
+        <div className="flex-grow-1">
+          {toastActive && (
+            <ToastMessage isActive={toastActive} onToggle={handleToggleToast} />
+          )}
+        </div>
+      </div>
     </form>
   );
 }

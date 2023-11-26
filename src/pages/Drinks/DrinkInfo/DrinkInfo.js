@@ -6,6 +6,7 @@ import axios from "../../../axios";
 import ModalNotification from "../../../components/ModalNotification/ModalNotification";
 import LoadingIcon from "../../../UI/LoadingIcon/LoadingIcon";
 import { objectToArrayWithId } from "../../../helpers/objects";
+import ToastMessage from "../../../components/ToastMessage/ToastMessage";
 
 export default function DrinkInfo(props) {
   const { id } = useParams();
@@ -15,6 +16,7 @@ export default function DrinkInfo(props) {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [toastActive, setToastActive] = useState(false);
 
   const fetchDrink = async () => {
     try {
@@ -57,9 +59,7 @@ export default function DrinkInfo(props) {
         await axios.post(`/bills/${activeBill.id}/items.json?auth=${auth.token}`, test);
         setMessage("Pomyślnie dodano drinka do rachunku!");
       } catch (ex) {
-        if (ex.data.status === 401) {
-          setError("Token użytkownika wygasł. Zaloguj się ponownie");
-        }
+        handleToggleToast();
       }
 
       fetchBill();
@@ -67,6 +67,10 @@ export default function DrinkInfo(props) {
       alert("Błąd: Nie masz aktywnego rachunku");
     }
   };
+
+  const handleToggleToast = () => {
+    setToastActive(!toastActive);
+};
 
   return loading ? (
     <LoadingIcon />
@@ -179,12 +183,20 @@ export default function DrinkInfo(props) {
           )}
         </p>
         {auth && activeBill && (
-          <ModalNotification
-            buttonText="Dodaj do rachunku"
-            message={`Czy na pewno chcesz dodać "${cocktail.name}" do rachunku? Nie będziesz mógł anulować tego zamówienia.`}
-            buttonColor="success"
-            onConfirm={handleAddToBill}
-          />
+          <div className="d-flex align-items-stretch">
+            <ModalNotification
+              style={{ height: '2.5rem' }}
+              buttonText="Dodaj do rachunku"
+              message={`Czy na pewno chcesz dodać "${cocktail.name}" do rachunku? Nie będziesz mógł anulować tego zamówienia.`}
+              buttonColor="success"
+              onConfirm={handleAddToBill}
+            />
+            <div className="flex-grow-1 ml-2">
+              {toastActive && (
+                <ToastMessage isActive={toastActive} onToggle={handleToggleToast} />
+              )}
+            </div>
+          </div>
         )}
       </div>
     </div>
