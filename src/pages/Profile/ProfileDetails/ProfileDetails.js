@@ -23,11 +23,12 @@ export default function ProfileDetails() {
   const submit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    let token
     try {
       const data = {
         idToken: auth.token,
         displayName: name,
-        returnSecureToken: true,
+        returnSecureToken: 'true',
       };
       if (password) {
         data.password = password;
@@ -35,11 +36,17 @@ export default function ProfileDetails() {
 
       const res = await axios.post(`accounts:update`, data);
 
+      if(password){
+        token = res.data.idToken
+      }else{
+        token = auth.token
+      }
+
       setAuth({
         email: res.data.email,
-        token: res.data.idToken,
         userId: res.data.localId,
         name: res.data.displayName,
+        token
 
       });
       setLoading(false);

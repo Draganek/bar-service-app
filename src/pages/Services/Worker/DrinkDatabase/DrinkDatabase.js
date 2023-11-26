@@ -6,6 +6,7 @@ import useAuth from "../../../../hooks/useAuth";
 import ModalNotification from "../../../../components/ModalNotification/ModalNotification";
 import LoadingIcon from "../../../../UI/LoadingIcon/LoadingIcon";
 import ToastMessage from "../../../../components/ToastMessage/ToastMessage";
+import CustomWrap from "../../../../components/CustomWrap/CustomWrap";
 
 export default function DrinkDatabase() {
   const [auth] = useAuth();
@@ -51,7 +52,7 @@ export default function DrinkDatabase() {
   return (loading ? <LoadingIcon /> : (
     <div>
       {cocktails.length > 0 ? (
-        <table className="table table-bordered">
+        <table className="table table-bordered" style={{fontSize: "0.8rem"}}>
           <thead>
             <tr>
               <th>Nazwa</th>
@@ -77,11 +78,12 @@ export default function DrinkDatabase() {
                 <td>
                   <Link
                     to={`/services/drinks_database/edytuj/${cocktail.id}`}
-                    className="btn btn-warning mr-1"
+                    className="btn btn-sm btn-warning"
                   >
                     Edytuj
                   </Link>
                   <ModalNotification
+                    small={true}
                     onConfirm={() => deleteHandler(cocktail.id)}
                     message={`Czy na pewno chcesz usunąć drink ${cocktail.name} z bazy danych?`}
                     tittle="Uwaga!"

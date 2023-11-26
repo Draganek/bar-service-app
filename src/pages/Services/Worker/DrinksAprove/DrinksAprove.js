@@ -5,6 +5,7 @@ import useAuth from "../../../../hooks/useAuth";
 import LoadingIcon from "../../../../UI/LoadingIcon/LoadingIcon";
 import ModalNotification from "../../../../components/ModalNotification/ModalNotification";
 import ToastMessage from "../../../../components/ToastMessage/ToastMessage";
+import { Link } from "react-router-dom/cjs/react-router-dom";
 
 export default function DrinksAprove() {
   const [loading, setLoading] = useState(true);
@@ -33,7 +34,7 @@ export default function DrinksAprove() {
         });
         drinksWaiting.sort((b, a) => b.status - a.status);
         setWaitingDrinks(drinksWaiting);
-      } catch {}
+      } catch { }
     } catch (ex) {
       setError(ex.message);
     }
@@ -44,12 +45,12 @@ export default function DrinksAprove() {
     fetchBills();
   }, []);
 
-  const handleCloseDrink = async (billId, drinkId) => {
+  const handleDrinkStatus = async (billId, drinkId, status) => {
     setLoading(true);
 
     try {
       await axios.patch(`/bills/${billId}/items/${drinkId}.json?auth=${auth.token}`, {
-        status: "1",
+        status: status,
       });
     } catch (ex) {
       if (ex.response.status === 401) {
@@ -59,7 +60,7 @@ export default function DrinksAprove() {
       }
     }
     fetchBills();
-   };
+  };
 
   const handleToggleToast = () => {
     setToastActive(!toastActive);
@@ -69,8 +70,8 @@ export default function DrinksAprove() {
     <LoadingIcon />
   ) : (
     <div>
-      {waitingDrinks ? (
-        <table className="table table-bordered">
+      {waitingDrinks.length > 0 ? (
+        <table className="table table-bordered" style={{fontSize: "0.8rem"}}>
           <thead>
             <tr>
               <th>Status</th>
@@ -83,13 +84,16 @@ export default function DrinksAprove() {
             {waitingDrinks.map((order) => (
               <tr key={order.id}>
                 <td>
-                  {parseInt(order.status) === 1 ? (
-                    <span className="badge bg-success text-light">Wydany</span>
-                  ) : (
-                    <span className="badge bg-warning text-light">
-                      Oczekuje
-                    </span>
+                  {parseInt(order.status) === 0 && (
+                    <span className="badge bg-warning text-light">Oczekuje</span>
                   )}
+                  {parseInt(order.status) === 1 && (
+                    <span className="badge bg-success text-light">Wydany</span>
+                  )}
+                  {parseInt(order.status) === 2 && (
+                    <span className="badge bg-danger text-light">Anulowany</span>
+                  )}
+
                 </td>
                 <td>{order.client}</td>
                 <td
@@ -102,16 +106,32 @@ export default function DrinksAprove() {
                   {order.name}
                 </td>
                 <td>
-                  <ModalNotification
+                  {order.status === '0' && (<ModalNotification
                     disabled={order.status === '1'}
                     onConfirm={(event) =>
-                      handleCloseDrink(order.billId, order.id)
+                      handleDrinkStatus(order.billId, order.id, "1")
                     }
                     message="Czy na pewno chcesz potwierdzić wydanie drinka dla tego użytkownika?"
                     buttonText="Wydaj"
                     buttonColor="success"
-                  />
-                  <button className="btn btn-primary ml-1">Info</button>
+                    small={true}
+                  />)}
+
+                  <Link to={`/drinks/show/${order.drinkId}`} className="btn btn-sm btn-primary">
+                    Info
+                  </Link>
+
+                  {order.status === '0' && (<ModalNotification
+                    disabled={order.status === '1'}
+                    onConfirm={(event) =>
+                      handleDrinkStatus(order.billId, order.id, "2")
+                    }
+                    message="Czy na pewno chcesz anulować to zamówienie?"
+                    buttonText="Anuluj"
+                    buttonColor="danger"
+                    small={true}
+                  />)}
+
                 </td>
               </tr>
             ))}

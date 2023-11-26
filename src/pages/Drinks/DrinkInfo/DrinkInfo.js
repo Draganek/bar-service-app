@@ -34,11 +34,11 @@ export default function DrinkInfo(props) {
         (bill) => bill.status === 1 && bill.user_id === auth.userId
       );
       setActiveBill(bill[0]);
-      setLoading(false);
+      
     } catch (ex) {
-      alert(JSON.stringify(ex.response));
+      
     }
-
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -49,14 +49,9 @@ export default function DrinkInfo(props) {
   const handleAddToBill = async (props) => {
     if (activeBill) {
       setLoading(true);
-      const items = { ...activeBill.items };
-      const itemsArray = Object.values(items);
-
-      itemsArray.push({ name: cocktail.name, price: cocktail.price, status: '0', drinkId: id, user: auth.userId });
-
-      const test = { name: cocktail.name, price: cocktail.price, status: '0', drinkId: id, user: auth.userId }
+      const items = { name: cocktail.name, price: cocktail.price, status: '0', drinkId: id, user: auth.userId }
       try {
-        await axios.post(`/bills/${activeBill.id}/items.json?auth=${auth.token}`, test);
+        await axios.post(`/bills/${activeBill.id}/items.json?auth=${auth.token}`, items);
         setMessage("Pomyślnie dodano drinka do rachunku!");
       } catch (ex) {
         handleToggleToast();
@@ -79,27 +74,27 @@ export default function DrinkInfo(props) {
       <img
         src={cocktail.image}
         class="card-img-top mx-auto border rounded"
-        style={{ maxWidth: "25rem", objectFit: "cover" }}
+        style={{ maxWidth: "20rem", objectFit: "cover" }}
         alt="..."
       />
       <div class="card-header">
-        <h2 class="card-title text-center">{cocktail.name}</h2>
+        <h3 class="card-title text-center">{cocktail.name}</h3>
       </div>
-      <div class="card-body">
+      <div style={{fontSize: "0.9rem"}} class="card-body">
         <p class="card-text">
           <b>Opis: </b>
           {cocktail.description}
         </p>
       </div>
 
-      <ul class="list-group list-group-flush">
+      <ul style={{fontSize: "0.9rem"}} class="list-group list-group-flush">
         {cocktail.alcohols && (
           <li class="list-group-item">
             <span className="card-text">
               <b>Alkohole: </b>
               {cocktail.alcohols.map((alcohol, index) => (
                 <React.Fragment key={index}>
-                  <a>{alcohol.name}</a>
+                  <a>{alcohol.name}{auth && auth.perm > 0 && ` ${alcohol.ml}ml`}</a>
                   {index !== cocktail.alcohols.length - 1 && <a>, </a>}
                 </React.Fragment>
               ))}
@@ -113,7 +108,7 @@ export default function DrinkInfo(props) {
               <b>Napoje: </b>
               {cocktail.fillers.map((filler, index) => (
                 <React.Fragment key={index}>
-                  <a>{filler.name}</a>
+                  <a>{filler.name}{auth && auth.perm > 0 && ` ${filler.ml}ml`}</a>
                   {index !== cocktail.fillers.length - 1 && <a>, </a>}
                 </React.Fragment>
               ))}
@@ -127,7 +122,7 @@ export default function DrinkInfo(props) {
               <b>Dodatki: </b>
               {cocktail.accessories.map((accessorie, index) => (
                 <React.Fragment key={index}>
-                  <a>{accessorie.name}</a>
+                  <a>{accessorie.name}{auth && auth.perm > 0 && ` x${accessorie.ml}`}</a>
                   {index !== cocktail.accessories.length - 1 && <a>, </a>}
                 </React.Fragment>
               ))}
@@ -163,7 +158,7 @@ export default function DrinkInfo(props) {
       </ul>
 
       <div class="card-body">
-        <p class="card-text">
+        <p style={{fontSize: "0.9rem"}} class="card-text">
           {!error && message ? (
             <span className="text-success">{message}</span>
           ) : auth ? (
@@ -185,7 +180,7 @@ export default function DrinkInfo(props) {
         {auth && activeBill && (
           <div className="d-flex align-items-stretch">
             <ModalNotification
-              style={{ height: '2.5rem' }}
+              style={{ height: '2.3rem', fontSize: "0.9rem" }}
               buttonText="Dodaj do rachunku"
               message={`Czy na pewno chcesz dodać "${cocktail.name}" do rachunku? Nie będziesz mógł anulować tego zamówienia.`}
               buttonColor="success"

@@ -17,12 +17,12 @@ export default function Services(props) {
 
         <div className="card">
             <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h2>Obsługa</h2>
-                <ul class="nav nav-pills">
-                    <li class="nav-item">
-                        <NavLink className="nav-link" isActive={isNavLinkActive} to={`/services`}>Pracownik</NavLink>
+                <h4>Obsługa</h4>
+                <ul className="nav nav-pills" style={{fontSize: "0.9rem"}}>
+                    <li className="nav-item">
+                        <NavLink className="nav-link " isActive={isNavLinkActive} to={`/services`}>Pracownik</NavLink>
                     </li>
-                    {auth.perm && Number(auth.perm) >= 2 && (<li class="nav-item">
+                    {auth.perm && Number(auth.perm) >= 2 && (<li className="nav-item">
                         <NavLink className="nav-link" to={`/services/admin`}>Administrator</NavLink>
                     </li>)}
 
@@ -30,13 +30,13 @@ export default function Services(props) {
                 </ul>
             </div>
             <div className="card-body">
-                <ul className="nav nav-tabs">
+                <ul className="nav nav-tabs" style={{fontSize: "0.9rem"}}>
 
                     <li className="nav-item">
                         <NavLink className="nav-link" exact to={`${url}`}>Zamówienia</NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavLink className="nav-link" exact to={`${url}/drinks_database`}>Baza drinków</NavLink>
+                        <NavLink className="nav-link" exact to={`${url}/drinks_database`}>Baza</NavLink>
                     </li>
                     <li className="nav-item">
                         <NavLink className="nav-link" to={`${url}/zatwierdzenia`}>Zatwierdzenia</NavLink>

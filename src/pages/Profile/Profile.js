@@ -15,7 +15,7 @@ export default function Profile(props) {
     return (
         <div className="card">
             <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h2>Mój profil</h2>
+                <h3>Mój profil</h3>
                 <button className={style.logout} onClick={e => logout()}>
                     Wyloguj
                 </button>

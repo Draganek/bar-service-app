@@ -67,17 +67,17 @@ export default function Bills() {
       {bills.length ? (
         <table className="table table-bordered">
           <thead>
-            <tr>
-              <th>Status</th>
+            <tr style={{fontSize: "0.8rem"}}>
+              <th >Status</th>
               <th>Data</th>
-              <th>Produkty</th>
+              <th>ilość</th>
               <th>Suma</th>
               <th>Opcje</th>
             </tr>
           </thead>
           <tbody>
             {bills.map((bill) => (
-              <tr key={bill.id}>
+              <tr key={bill.id} style={{fontSize: "0.8rem"}}>
                 <td>
                   {parseInt(bill.status) === 1 ? (
                     <span className="badge bg-success text-light">Otwarte</span>
@@ -95,7 +95,7 @@ export default function Bills() {
                 <td>
                   <Link
                     to={`/profil/bills/show/${bill.id}`}
-                    className="btn btn-warning"
+                    className="btn btn-sm btn-warning"
                   >
                     Pokaż
                   </Link>
@@ -108,7 +108,7 @@ export default function Bills() {
         <h6>Nie znaleziono żadnego rachunku</h6>
       )}
       {bills.some((bill) => bill.status == 1) ? (
-        <a>Możesz mieć tylko jeden otwarty rachunek.</a>
+        <span style={{fontSize: "0.8rem"}} className="alert alert-warning">Możesz mieć tylko jeden otwarty rachunek.</span>
       ) : (
         <LoadingButton loading={loading} className="btn btn-primary" onClick={addBillHandler}>
           Otwórz nowy rachunek

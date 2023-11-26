@@ -18,13 +18,10 @@ export default function Home(props) {
     <LoadingIcon />
   ) : (
     <>
-      {auth && (
-        <h5 className="text-right">Witaj! <span class="badge badge-secondary">{auth.name}</span></h5>
-      )}
       <WhatNew />
       <div className="pt-2">
         <Alert variant="secondary" className="pt-400">
-          <Alert.Heading>Witaj w Dragan Bar! </Alert.Heading>
+          <Alert.Heading>Witaj {auth && (<span className="badge badge-secondary">{auth.name}</span>)} w Dragan Bar! </Alert.Heading>
           <p>
             Jesteśmy dumni, że możemy cię gościć w naszym niezwykłym miejscu,
             gdzie każdy wieczór staje się wyjątkowy i pełen przygód. Nasza pasja

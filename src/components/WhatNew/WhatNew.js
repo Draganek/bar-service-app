@@ -13,7 +13,7 @@ function WhatNew(props) {
           alt="First slide"
         />
         <Carousel.Caption>
-          <h2>Witaj na stronie głównej naszego baru!</h2>
+          <h5>Witaj na stronie głównej naszego baru!</h5>
           <h6>Znajdź chwilę i zapoznaj się z naszą ofertą</h6>
         </Carousel.Caption>
       </Carousel.Item>

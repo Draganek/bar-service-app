@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 
 const ModalNotification = ({
+  small = false,
   style,
   disabled = false,
   onConfirm,
@@ -24,7 +25,7 @@ const ModalNotification = ({
 
   return (
     <>
-      <Button style={style} disabled={disabled} variant={`btn btn-${buttonColor}`} onClick={handleShow}>
+      <Button style={style} disabled={disabled} variant={`btn ${small && "btn btn-sm"} btn-${buttonColor}`} onClick={handleShow}>
         {buttonText}
       </Button>
       <Modal show={showModal} onHide={handleClose}>

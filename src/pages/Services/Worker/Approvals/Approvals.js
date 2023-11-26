@@ -56,14 +56,13 @@ export default function Approvals() {
   return loading ? (
     <LoadingIcon />
   ) : (
-    <div>
+    <div style={{ fontSize: "0.8rem" }}>
       {bills.length ? (
         <table className="table table-bordered">
           <thead>
             <tr>
               <th>Status</th>
-              <th>Data</th>
-              <th>Id użytkownika</th>
+              <th>Id</th>
               <th>Suma</th>
               <th>Opcje</th>
             </tr>
@@ -80,7 +79,6 @@ export default function Approvals() {
                     </span>
                   )}
                 </td>
-                <td>{bill.date}</td>
                 <td
                   style={{
                     wordWrap: "break-word",
@@ -101,6 +99,7 @@ export default function Approvals() {
                 </td>
                 <td>
                   <ModalNotification
+                    small={true}
                     onConfirm={(event) => handleCloseBill(bill.id)}
                     message="Czy na pewno chcesz zamknąć rachunek tego użytkownika?"
                     buttonText="Zamknij rachunek"

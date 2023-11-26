@@ -32,7 +32,7 @@ export default function AllDrinks(props) {
   return (loading ? <LoadingIcon/> : (
     <div className="card-group" style={{ display: 'flex', flexWrap: 'wrap' }}>
       {cocktails && cocktails.map((drink) => (
-        <DrinkCard drink={drink} link={`/drinks/show/${drink.id}`} style={{ height: '13rem', objectFit: "cover" }}/>
+        <DrinkCard key={drink.id} drink={drink} link={`/drinks/show/${drink.id}`} style={{ height: '10rem', objectFit: "cover" }}/>
       ))}
       
 

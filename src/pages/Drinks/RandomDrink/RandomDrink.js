@@ -55,7 +55,7 @@ export default function RandomDrink(props) {
   return loading ? (
     <LoadingIcon />
   ) : (
-    <div class="card">
+    <div className="card">
       <div
         style={{
           display: "flex",
@@ -67,9 +67,9 @@ export default function RandomDrink(props) {
           <div className="m-5">
             {
               <>
-                <p className="text-center">
+                <div className="text-center">
                   <h3>Trwa losowanie...</h3>
-                </p>
+                </div>
                 <LoadingIcon color="danger" />
                 <p className="text-center">{text}</p>
               </>
@@ -77,7 +77,7 @@ export default function RandomDrink(props) {
           </div>
         ) : drawtedDrink ? (
           drawtedDrink && (
-            <div style={{ marginLeft: "4rem", marginRight: "4rem" }}>
+            <div style={{ marginLeft: "3rem", marginRight: "3rem", marginTop: "0.5rem", marginBottom: "0.5rem" }}>
               <DrinkCard
                 drink={drawtedDrink}
                 link={`/drinks/show/${drawtedDrink.id}`}
@@ -90,8 +90,8 @@ export default function RandomDrink(props) {
             src={randomDrinkImage}
             className="card-img-top"
             style={{
-              height: "25rem",
-              width: "25rem",
+              height: "20rem",
+              width: "20rem",
             }}
             alt="..."
           />
@@ -102,12 +102,12 @@ export default function RandomDrink(props) {
         <h4 className="text-center">Losuj pozycje!</h4>
       </div>
 
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item text-center">
+      <ul className="list-group list-group-flush">
+        <li className="list-group-item text-center">
           Naciśnij przycisk, żeby rozpocząć losowanie
         </li>
       </ul>
-      <div class="card-body">
+      <div className="card-body">
         <button
           onClick={handleClick}
           className="btn btn-primary btn-lg btn-block mt-3"

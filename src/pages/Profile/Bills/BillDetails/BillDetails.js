@@ -20,16 +20,22 @@ const BillDetails = () => {
   const renderBill = (props) => {
     if (bill.items) {
       return objectToArrayWithId(bill.items).map((product, id) => (
-        <tr key={id}>
+        <tr style={{fontSize: "0.8rem"}} key={id}>
           <th scope="row">{id + 1}</th>
           <td>{product.name}</td>
-          {product.status === "1" ? (
+          {parseInt(product.status) === 0 && (
+            <td className="text-warning">
+              <b>Oczekuje</b>
+            </td>
+          )}
+          {parseInt(product.status) === 1 && (
             <td className="text-success">
               <b>Wydany</b>
             </td>
-          ) : (
-            <td className="text-warning">
-              <b>Oczekujący</b>
+          )}
+          {parseInt(product.status) === 2 && (
+            <td className="text-danger">
+              <b>Anulowany</b>
             </td>
           )}
 
@@ -44,10 +50,10 @@ const BillDetails = () => {
   }, []);
 
   return (
-    <div className="container mt-4">
+    <div style={{fontSize: "0.8rem"}} className="container mt-4">
       <div className="card">
         <div className="card-header">
-          <h3 className="mb-2 card-header">Rachunek za zamówienia</h3>
+          <h5 className="mb-2 card-header">Rachunek za zamówienia</h5>
           <div class="card">
             <ul class="list-group ">
               <li class="list-group-item">Data: {bill.date}r</li>
@@ -81,12 +87,13 @@ const BillDetails = () => {
             </thead>
             <tbody>{renderBill()}</tbody>
           </table>
+          {!bill.items && <p>Brak zamówień</p>}
         </div>
         <div className="card-footer">
-          <span style={{fontSize: "1.2rem"}}>
+          <span style={{ fontSize: "1rem" }}>
             <b>Suma:{" "}</b>
-            {bill.items &&
-              objectToArrayWithId(bill.items).reduce((total, item) => total + Number(item.price), 0)}
+            {bill.items ?
+              objectToArrayWithId(bill.items).reduce((total, item) => total + Number(item.price), 0) : 0}
             zł
           </span>
         </div>

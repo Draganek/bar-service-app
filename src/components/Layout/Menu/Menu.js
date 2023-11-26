@@ -26,14 +26,14 @@ function Menu() {
 
         <li className={style.menuItem}>
           <NavLink to="/news" activeClassName={style.menuItemActive}>
-            News
+            Nowe
           </NavLink>
         </li>
       </ul>
       <ul className={`${style.menu}`}>
         {auth ? (
           <>
-            { auth.perm && Number(auth.perm) >= 0 && (<li className={`${style.menuItem}`}>
+            { auth.perm && Number(auth.perm) > 0 && (<li className={`${style.menuItem}`}>
               <NavLink to="/services" activeClassName={style.menuItemActive}>
                 Usługi
               </NavLink>
@@ -50,13 +50,13 @@ function Menu() {
           <>
             <li className={style.menuItem}>
               <NavLink activeClassName={style.menuItemActive} to="/rejestracja">
-                Register
+                Rejestracja
               </NavLink>
             </li>
 
             <li className={style.menuItem}>
               <NavLink activeClassName={style.menuItemActive} to="/zaloguj">
-                log in
+                Zaloguj
               </NavLink>
             </li>
           </>

@@ -5,7 +5,7 @@ export default function DrinkCard({ drink, link, style }) {
   return (
     <div
       className="card"
-      style={{ flexBasis: "calc(50% - 16px)", margin: "8px" }}
+      style={{ flexBasis: "calc(50% - 0.1rem)", margin: "0.05rem" }}
     >
       <img
         src={drink.image}
@@ -13,8 +13,8 @@ export default function DrinkCard({ drink, link, style }) {
         alt="..."
         style={style}
       />
-      <h4 className="card-header text-center">{drink.name}</h4>
-      <div className="card-body">
+      <h6 className="card-header text-center">{drink.name}</h6>
+      <div style={{fontSize: "0.8rem"}} className="card-body">
         {drink.alcohols && (
           <span className="card-text">
             <b>Alkohole: </b>
@@ -61,11 +61,11 @@ export default function DrinkCard({ drink, link, style }) {
         </span>
         
       </div>
-      <div className="card-footer d-flex">
+      <div style={{fontSize: "0.8rem"}} className="card-footer d-flex">
         <a>
           <b>Cena:</b> {drink.price}zł{" "}
         </a>
-        <Link className="btn btn-primary ml-auto" to={link} >Więcej...</Link>
+        <Link className="btn btn-sm btn-primary ml-auto" to={link} >Pokaż</Link>
       </div>
     </div>
   );
