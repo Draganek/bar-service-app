@@ -70,26 +70,26 @@ export default function DrinkInfo(props) {
   return loading ? (
     <LoadingIcon />
   ) : (
-    <div class="card">
+    <div className="card">
       <img
         src={cocktail.image}
-        class="card-img-top mx-auto border rounded"
+        className="card-img-top mx-auto border rounded"
         style={{ maxWidth: "20rem", objectFit: "cover" }}
         alt="..."
       />
-      <div class="card-header">
-        <h3 class="card-title text-center">{cocktail.name}</h3>
+      <div className="card-header">
+        <h3 className="card-title text-center">{cocktail.name}</h3>
       </div>
-      <div style={{fontSize: "0.9rem"}} class="card-body">
-        <p class="card-text">
+      <div style={{fontSize: "0.9rem"}} className="card-body">
+        <p className="card-text">
           <b>Opis: </b>
           {cocktail.description}
         </p>
       </div>
 
-      <ul style={{fontSize: "0.9rem"}} class="list-group list-group-flush">
+      <ul style={{fontSize: "0.9rem"}} className="list-group list-group-flush">
         {cocktail.alcohols && (
-          <li class="list-group-item">
+          <li className="list-group-item">
             <span className="card-text">
               <b>Alkohole: </b>
               {cocktail.alcohols.map((alcohol, index) => (
@@ -103,7 +103,7 @@ export default function DrinkInfo(props) {
           </li>
         )}
         {cocktail.fillers && (
-          <li class="list-group-item">
+          <li className="list-group-item">
             <span className="card-text">
               <b>Napoje: </b>
               {cocktail.fillers.map((filler, index) => (
@@ -117,7 +117,7 @@ export default function DrinkInfo(props) {
           </li>
         )}
         {cocktail.accessories && (
-          <li class="list-group-item">
+          <li className="list-group-item">
             <span className="card-text">
               <b>Dodatki: </b>
               {cocktail.accessories.map((accessorie, index) => (
@@ -132,33 +132,33 @@ export default function DrinkInfo(props) {
         )}
 
         <li className="list-group-item">
-          <p class="card-text">
+          <p className="card-text">
             <b>Typ drinka: </b>
             {cocktail.type}
           </p>
         </li>
         <li className="list-group-item">
-          <p class="card-text">
+          <p className="card-text">
             <b>Metoda mieszania: </b>
             {cocktail.method}
           </p>
         </li>
         <li className="list-group-item">
-          <p class="card-text">
+          <p className="card-text">
             <b>Szkło: </b>
             {cocktail.glass}
           </p>
         </li>
         <li className="list-group-item">
-          <p class="card-text">
+          <p className="card-text">
             <b>Cena: </b>
             {cocktail.price}zł
           </p>
         </li>
       </ul>
 
-      <div class="card-body">
-        <p style={{fontSize: "0.9rem"}} class="card-text">
+      <div className="card-body">
+        <p style={{fontSize: "0.9rem"}} className="card-text">
           {!error && message ? (
             <span className="text-success">{message}</span>
           ) : auth ? (
