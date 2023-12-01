@@ -26,7 +26,7 @@ function Menu() {
 
         <li className={style.menuItem}>
           <NavLink to="/news" activeClassName={style.menuItemActive}>
-            Nowośći
+            Nowości
           </NavLink>
         </li>
       </ul>

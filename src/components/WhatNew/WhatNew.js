@@ -5,7 +5,7 @@ import "./WhatNew.css";
 
 function WhatNew(props) {
   return (
-    <Carousel fade className="card">
+    <Carousel fade className="card mt-2">
       <Carousel.Item>
         <img
           className="d-block w-100"

@@ -11,8 +11,8 @@ export default function Login(props) {
   const history = useHistory();
   const [error, setError] = useState();
 
-  const [email, setEmail] = useState("thedragonplgaming@gmail.com");
-  const [password, setPassword] = useState("tajne123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [valid, setValid] = useState(null);
 
@@ -39,7 +39,7 @@ export default function Login(props) {
         name: res.data.displayName,
       }
 
-      if(userExist.length !== 0) {
+      if (userExist.length !== 0) {
         data.perm = userExist[0].permission
       }
 
@@ -47,7 +47,9 @@ export default function Login(props) {
       history.push("/");
 
     } catch (ex) {
-      setError(ex.response.data.error.message);
+      if (ex.response.status === 400) {
+        setError("Błędne dane logowania");
+      } else { setError(ex.response.data.error.message); }
       setLoading(false);
     }
   };

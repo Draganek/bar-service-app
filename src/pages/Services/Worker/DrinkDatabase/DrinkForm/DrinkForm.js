@@ -161,7 +161,7 @@ const DrinkForm = (props) => {
   };
 
   return (
-    <form onSubmit={submit}>
+    <form onSubmit={submit} style={{fontSize: "0.8rem"}}>
       <Input
         label="Nazwa"
         value={form.name.value}

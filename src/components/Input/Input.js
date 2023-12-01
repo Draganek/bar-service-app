@@ -2,8 +2,8 @@ import { useRef } from "react";
 
 const InputText = (props) => {
   return (
-    <div className="form-group">
-      <h5>{props.label}</h5>
+    <div className="form-group" >
+      <h6>{props.label}</h6>
       <input
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
@@ -20,7 +20,7 @@ const InputText = (props) => {
 const InputSelect = (props) => {
   return (
     <div className="form-group">
-      <h5>{props.label}</h5>
+      <h6>{props.label}</h6>
       <select
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
@@ -90,7 +90,7 @@ const InputFile = (props) => {
 const InputRadio = (props) => {
   return (
     <div className="form-group">
-      <h5>{props.label}</h5>
+      <h6>{props.label}</h6>
       {props.options.map((option) => (
         <div className="custom-control custom-radio" key={option.value}>
           <input
@@ -117,7 +117,7 @@ const InputRadio = (props) => {
 const InputTextarea = (props) => {
   return (
     <div className="form-group">
-      <h5>{props.label}</h5>
+      <h6>{props.label}</h6>
       <textarea
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
@@ -134,7 +134,7 @@ const InputTextarea = (props) => {
 const InputDoubleObject = (props) => {
   return (
     <div>
-      <h5>{props.label}</h5>
+      <h6>{props.label}</h6>
       {props.form.value.length > 0 && (
         <table class="table table-bordered">
           <thead>
@@ -176,7 +176,7 @@ const InputDoubleObject = (props) => {
                 <th scope="col">
                   <button
                     type="button"
-                    className="btn btn-danger"
+                    className="btn btn-sm btn-danger"
                     onClick={() =>
                       props.handleRemoveAlcohol(props.field, index)
                     }
@@ -192,7 +192,7 @@ const InputDoubleObject = (props) => {
 
       <button
         type="button"
-        className="btn btn-primary mb-2"
+        className="btn btn-sm btn-primary mb-2"
         onClick={() => props.handleAddAlcohol(props.field)}
       >
         {props.button}
