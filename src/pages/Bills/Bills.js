@@ -38,7 +38,7 @@ export default function Bills() {
     setLoading(true);
     try {
       await axios.post(`/bills.json?auth=${auth.token}`, {
-        status: 1,
+        status: "2",
         name: auth.name,
         date: ActualDate(),
         startTime: ActualTime(),
@@ -82,11 +82,16 @@ export default function Bills() {
                 {bills.map((bill) => (
                   <tr key={bill.id} style={{ fontSize: "0.8rem" }}>
                     <td>
-                      {parseInt(bill.status) === 1 ? (
+                    {(bill.status) === "2" && (
+                        <span className="badge bg-warning text-light">
+                          W akceptacji
+                        </span>
+                      )}
+                      {parseInt(bill.status) === 1 && (
                         <span className="badge bg-success text-light">
                           Otwarte
                         </span>
-                      ) : (
+                      )}  {(bill.status) === "0" && (
                         <span className="badge bg-secondary text-light">
                           Zamknięte
                         </span>
@@ -120,7 +125,7 @@ export default function Bills() {
           ) : (
             <h6>Nie znaleziono żadnego rachunku</h6>
           )}
-          {bills.some((bill) => bill.status == 1) ? (
+          {bills.some((bill) => parseInt(bill.status) > 0) ? (
             <span
               style={{ fontSize: "0.8rem" }}
               className="alert alert-warning"

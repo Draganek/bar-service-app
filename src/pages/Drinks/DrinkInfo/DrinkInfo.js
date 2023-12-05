@@ -31,7 +31,7 @@ export default function DrinkInfo(props) {
     try {
       const res = await axios.get(`/bills.json`);
       const bill = objectToArrayWithId(res.data).filter(
-        (bill) => bill.status === 1 && bill.user_id === auth.userId
+        (bill) => parseInt(bill.status) === 1 && bill.user_id === auth.userId
       );
       setActiveBill(bill[0]);
       
@@ -49,7 +49,7 @@ export default function DrinkInfo(props) {
   const handleAddToBill = async (props) => {
     if (activeBill) {
       setLoading(true);
-      const items = { name: cocktail.name, price: cocktail.price, status: '0', drinkId: id, user: auth.userId }
+      const items = { name: cocktail.name, price: cocktail.price, status: '3', drinkId: id, user: auth.userId }
       try {
         await axios.post(`/bills/${activeBill.id}/items.json?auth=${auth.token}`, items);
         setMessage("Pomyślnie dodano drinka do rachunku!");
@@ -161,8 +161,8 @@ export default function DrinkInfo(props) {
         <p style={{fontSize: "0.9rem"}} className="card-text">
           {!error && message ? (
             <span className="text-success">{message}</span>
-          ) : auth ? (
-            activeBill?.status === 1 ? (
+          ) : auth ? (activeBill &&
+            activeBill.status === '1' ? (
               <span className="text-success">
                 Masz otwarty rachunek! Możesz zamówić produkt.
               </span>

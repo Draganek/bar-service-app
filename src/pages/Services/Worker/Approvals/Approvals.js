@@ -6,6 +6,7 @@ import LoadingIcon from "../../../../UI/LoadingIcon/LoadingIcon";
 import ModalNotification from "../../../../components/ModalNotification/ModalNotification";
 import ActualTime from "../../../../components/ActualTime/ActualTime";
 import ToastMessage from "../../../../components/ToastMessage/ToastMessage";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 export default function Approvals() {
   const [loading, setLoading] = useState(true);
@@ -13,13 +14,13 @@ export default function Approvals() {
   const [bills, setBills] = useState([]);
   const [error, setError] = useState("");
   const [toastActive, setToastActive] = useState(false);
-
+  const history = useHistory();
 
   const fetchBills = async () => {
     try {
       const res = await axios.get("/bills.json");
       const newData = objectToArrayWithId(res.data).filter(
-        (bill) => bill.status === 1
+        (bill) => parseInt(bill.status) > 0
       );
       newData.sort((a, b) => b.status - a.status);
       setBills(newData);
@@ -35,6 +36,10 @@ export default function Approvals() {
 
   const handleToggleToast = () => {
     setToastActive(!toastActive);
+  };
+
+  const handleShowBill = (billId) => {
+    history.push(`/services/bill/${billId}`);
   };
 
   const handleCloseBill = async (id) => {
@@ -62,7 +67,7 @@ export default function Approvals() {
           <thead>
             <tr>
               <th>Status</th>
-              <th>Id</th>
+              <th>Imię</th>
               <th>Suma</th>
               <th>Opcje</th>
             </tr>
@@ -74,8 +79,8 @@ export default function Approvals() {
                   {parseInt(bill.status) === 1 ? (
                     <span className="badge bg-success text-light">Otwarte</span>
                   ) : (
-                    <span className="badge bg-secondary text-light">
-                      Zamknięte
+                    <span className="badge bg-warning text-light">
+                      W akceptacji
                     </span>
                   )}
                 </td>
@@ -86,25 +91,24 @@ export default function Approvals() {
                     whiteSpace: "pre-line",
                   }}
                 >
-                  {bill.user_id}
+                  {bill.name}
                 </td>
                 <td>
                   {bill.items
                     ? objectToArrayWithId(bill.items).reduce(
-                      (total, item) => total + Number(item.price),
-                      0
-                    )
+                        (total, item) => total + Number(item.price),
+                        0
+                      )
                     : 0}
                   zł
                 </td>
                 <td>
-                  <ModalNotification
-                    small={true}
-                    onConfirm={(event) => handleCloseBill(bill.id)}
-                    message="Czy na pewno chcesz zamknąć rachunek tego użytkownika?"
-                    buttonText="Zamknij rachunek"
-                    buttonColor="primary"
-                  />
+                  <button
+                    className="btn btn-sm btn-primary"
+                    onClick={(event) => handleShowBill(bill.id)}
+                  >
+                    Pokaż
+                  </button>
                 </td>
               </tr>
             ))}

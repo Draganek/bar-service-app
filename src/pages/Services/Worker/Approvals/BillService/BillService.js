@@ -1,0 +1,256 @@
+import React, { useState, useEffect } from "react";
+import axios from "../../../../../axios";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { objectToArrayWithId } from "../../../../../helpers/objects";
+import LoadingIcon from "../../../../../UI/LoadingIcon/LoadingIcon";
+import ModalNotification from "../../../../../components/ModalNotification/ModalNotification";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import useAuth from "../../../../../hooks/useAuth";
+import ActualTime from "../../../../../components/ActualTime/ActualTime";
+
+const BillService = () => {
+  const { id } = useParams();
+  const [bill, setBill] = useState([]);
+  const [auth] = useAuth();
+  const [waitingDrinks, setWaitingDrinks] = useState();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [toastActive, setToastActive] = useState(false);
+
+  const fetchBill = async () => {
+    try {
+      const res = await axios.get(`/bills/${id}.json`);
+      const billData = res.data;
+      setBill(billData);
+      setWaitingDrinks(objectToArrayWithId(billData.items));
+    } catch (e) {
+      alert(e);
+    }
+    setLoading(false);
+  };
+
+  const handleDrinkStatus = async (drinkId, status) => {
+    setLoading(true);
+
+    try {
+      await axios.patch(
+        `/bills/${id}/items/${drinkId}.json?auth=${auth.token}`,
+        {
+          status: status,
+        }
+      );
+    } catch (ex) {
+      if (ex.response.status === 401) {
+        handleToggleToast();
+      } else {
+        setError(ex.message);
+      }
+    }
+    fetchBill();
+  };
+
+  const handleBill = async (status) => {
+    try {
+      await axios.patch(`/bills/${id}.json?auth=${auth.token}`, {
+        status: status,
+      });
+    } catch (ex) {
+      if (ex.response.status === 401) {
+        handleToggleToast();
+      } else {
+        setError(ex.message);
+      }
+    }
+    fetchBill();
+  };
+
+  const handleToggleToast = () => {
+    setToastActive(!toastActive);
+  };
+
+  useEffect(() => {
+    fetchBill();
+  }, []);
+
+  return loading ? (
+    <LoadingIcon />
+  ) : (
+    <div style={{ fontSize: "0.9rem" }}>
+      <div>
+        <h4 className="card-header">Rachunek za zamówienia</h4>
+        <div className="card">
+          <ul className="list-group ">
+            <li className="list-group-item">
+              <b>Imię użytkownika:</b> {bill.name}
+            </li>
+            <li className="list-group-item">
+              <b>Id:</b> {bill.user_id}r
+            </li>
+            <li className="list-group-item">
+              <b>Data:</b> {bill.date}r
+            </li>
+            <li className="list-group-item">
+              <b>Rozpoczęcie:</b> {bill.startTime}
+            </li>
+            {bill.endTime ? (
+              <li className="list-group-item">
+                <b>Zakończenie:</b> {bill.endTime}
+              </li>
+            ) : null}
+            <li className="list-group-item">
+              {" "}
+              <b>Status rachunku:</b>{" "}
+              {bill.status === "2" && (
+                <>
+                  <span className="badge bg-warning text-light mr-2">
+                    W akceptacji
+                  </span>
+                  <ModalNotification
+                    onConfirm={e => handleBill("1")}
+                    buttonColor="primary"
+                    message={`Czy chcesz otworzyć rachunek użytkownika "${bill.name}"`}
+                    small={true}
+                    buttonText="Otwórz rachunek" />
+                </>
+              )}
+              {parseInt(bill.status) === 1 && (
+                <>
+                  <span className="badge bg-success text-light mr-2">Otwarte</span>
+                  <ModalNotification
+                    onConfirm={e => handleBill("0")}
+                    buttonColor="warning"
+                    message={`Czy chcesz otworzyć rachunek użytkownika "${bill.name}"`}
+                    small={true}
+                    buttonText="Zamknij rachunek" />
+                </>
+              )}
+              {bill.status === "0" && (
+                <span className="badge bg-secondary text-light">Zamknięte</span>
+              )}
+            </li>
+          </ul>
+        </div>
+
+
+
+
+        {waitingDrinks && waitingDrinks.length > 0 ? (
+          <table
+            className="table table-bordered"
+            style={{ fontSize: "0.8rem" }}
+          >
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>Drink</th>
+                <th>Cena</th>
+                <th>Opcje</th>
+              </tr>
+            </thead>
+            <tbody>
+              {waitingDrinks.map((order) => (
+                <tr key={order.id}>
+                  <td>
+                    {parseInt(order.status) === 0 && (
+                      <span className="badge bg-primary text-light">
+                        Zaakceptowany
+                      </span>
+                    )}
+                    {parseInt(order.status) === 1 && (
+                      <span className="badge bg-success text-light">
+                        Wydany
+                      </span>
+                    )}
+                    {parseInt(order.status) === 2 && (
+                      <span className="badge bg-danger text-light">
+                        Anulowany
+                      </span>
+                    )}
+                    {parseInt(order.status) === 3 && (
+                      <span className="badge bg-warning text-light">
+                        W akceptacji
+                      </span>
+                    )}
+                  </td>
+                  <td>
+                    {order.name}
+                  </td>
+                  <td>{order.price}zł</td>
+                  <td>
+
+                    {order.status === "3" && (
+                      <ModalNotification
+                        disabled={order.status === "1"}
+                        onConfirm={(event) =>
+                          handleDrinkStatus(order.id, "0")
+                        }
+                        message={`Czy na pewno chcesz zmienić status drinka ${order.name} na zaakceptowany?`}
+                        buttonText="Akceptuj"
+                        buttonColor="success"
+                        small={true}
+                      />
+                    )}
+
+                    {order.status === "0" && (
+                      <ModalNotification
+                        disabled={order.status === "1"}
+                        onConfirm={(event) =>
+                          handleDrinkStatus(order.id, "1")
+                        }
+                        message="Czy na pewno chcesz potwierdzić wydanie drinka dla tego użytkownika?"
+                        buttonText="Wydaj"
+                        buttonColor="success"
+                        small={true}
+                      />
+                    )}
+
+                    <Link
+                      to={`/drinks/show/${order.drinkId}`}
+                      className="btn btn-sm btn-primary"
+                    >
+                      Info
+                    </Link>
+
+                    {order.status === "0" && (
+                      <ModalNotification
+                        disabled={order.status === "1"}
+                        onConfirm={(event) =>
+                          handleDrinkStatus(order.id, "2")
+                        }
+                        message="Czy na pewno chcesz anulować to zamówienie?"
+                        buttonText="Anuluj"
+                        buttonColor="danger"
+                        small={true}
+                      />
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <h6 className="m-3 text-center">Nie znaleziono żadnego zamówienia</h6>
+        )}
+
+
+
+
+
+        <div className="card-footer">
+          <span style={{ fontSize: "1rem" }}>
+            <b>Suma: </b>
+            {bill.items
+              ? objectToArrayWithId(bill.items).reduce(
+                (total, item) => { if (Number(item.status) < 2) { return total + Number(item.price) } else { return total } },
+                0
+              )
+              : 0}
+            zł
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default BillService;

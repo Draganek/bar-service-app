@@ -124,6 +124,7 @@ export default function RandomDrink(props) {
 
       <ul className="list-group list-group-flush">
         <select
+            disabled={loadingDrink}
             value={cocktailsType}
             onChange={(e) => setCoctailsType(e.target.value)}
             className="custom-select text-center"

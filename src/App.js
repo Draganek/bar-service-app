@@ -23,6 +23,7 @@ import Admin from "./pages/Services/Admin/Admin"
 import StafRoute from './hoc/StafRoute/StafRoute';
 import Bills from './pages/Bills/Bills';
 import Profile from './pages/Profile/Profile'
+import BillService from './pages/Services/Worker/Approvals/BillService/BillService'
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -39,6 +40,7 @@ function App() {
           <StafRoute path="/services/admin" component={Admin} perm={2} />
           <StafRoute path="/services/drinks_database/edytuj/:id" component={EditDrink} perm={1} />
           <StafRoute path="/services/drinks_database/dodaj" component={AddDrink} perm={1} />
+          <StafRoute path="/services/bill/:id" component={BillService} perm={1} />
           <StafRoute path="/services" component={Services} perm={1} />
           <AuthenticatedRoute path="/profil" component={Profile} />
           <AuthenticatedRoute path="/bills/:id" component={BillDetails} />
