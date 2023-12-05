@@ -9,15 +9,18 @@ export default function RandomDrink(props) {
   const [loadingTime] = useState(2);
   const [loadingDrink, setLoadingDrink] = useState(false);
   const [text, setText] = useState("");
+  const [allCocktails, setAllCoctails] = useState([]);
   const [cocktails, setCoctails] = useState([]);
   const [drawtedDrink, setDrawtedDrink] = useState();
   const [loading, setLoading] = useState(true);
+  const [cocktailsType, setCoctailsType] = useState("0");
 
   const fetchDrinks = async () => {
     try {
       const res = await axios.get("/cocktails.json");
       const newData = objectToArrayWithId(res.data).filter(
         (cocktail) => cocktail.status === "1");
+      setAllCoctails(newData)
       setCoctails(newData);
       setLoading(false);
     } catch (ex) {
@@ -51,6 +54,23 @@ export default function RandomDrink(props) {
   useEffect(() => {
     fetchDrinks();
   }, []);
+
+  const specifyCoctails = () => {
+
+    if (cocktailsType !== "0") {
+      const newCocktails = allCocktails.filter((drink) =>
+        drink.type.includes(cocktailsType)
+      );
+      setCoctails(newCocktails);
+    } else{
+      setCoctails(allCocktails)
+    }
+  };
+
+  useEffect(() => {
+    specifyCoctails();
+  }, [cocktailsType]);
+
 
   return loading ? (
     <LoadingIcon />
@@ -103,14 +123,22 @@ export default function RandomDrink(props) {
       </div>
 
       <ul className="list-group list-group-flush">
-        <li className="list-group-item text-center">
-          Naciśnij przycisk, żeby rozpocząć losowanie
-        </li>
+        <select
+            value={cocktailsType}
+            onChange={(e) => setCoctailsType(e.target.value)}
+            className="custom-select text-center"
+          >
+            <option value="0">Wszystkie</option>
+            <option value="shot">Shot</option>
+            <option value="short">Short</option>
+            <option value="long">Long</option>
+            <option value="premium">Premium</option>
+          </select>
       </ul>
       <div className="card-body">
         <button
           onClick={handleClick}
-          className="btn btn-primary btn-lg btn-block mt-3"
+          className="btn btn-primary btn-lg btn-block"
           disabled={loadingDrink}
         >
           Losuj!

@@ -1,17 +1,15 @@
-import useAuth from "../../../hooks/useAuth";
 import { useState, useEffect } from "react";
-import axios from "../../../axios"
-import { useRouteMatch } from "react-router-dom";
+import axios from "../../../axios";
 import { objectToArrayWithId } from "../../../helpers/objects";
 import DrinkCard from "../DrinkCard/DrinkCard";
 import LoadingIcon from "../../../UI/LoadingIcon/LoadingIcon";
 
 export default function AllDrinks(props) {
-  const [auth] = useAuth();
-  const [search, setSearch] = useState("")
-  const { url } = useRouteMatch();
+  const [search, setSearch] = useState("");
+  const [allCocktails, setAllCoctails] = useState([]);
   const [cocktails, setCoctails] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [cocktailsType, setCoctailsType] = useState("0");
 
   const fetchDrinks = async () => {
     try {
@@ -19,6 +17,7 @@ export default function AllDrinks(props) {
       const newData = objectToArrayWithId(res.data).filter(
         (cocktail) => cocktail.status === "1"
       );
+      setAllCoctails(newData);
       setCoctails(newData);
     } catch (ex) {
       alert(JSON.stringify(ex.response));
@@ -26,21 +25,21 @@ export default function AllDrinks(props) {
     setLoading(false);
   };
 
-  const inputChangeHandler = async (value) => {
-    setSearch(value);
-    setLoading(true)
-    try {
-      const res = await axios.get("/cocktails.json");
-      const newData = objectToArrayWithId(res.data).filter(
-        (cocktail) => cocktail.status === "1"
+  const SearchCocktails = () => {
+    setLoading(true);
+    let newCocktails = allCocktails.filter((drink) =>
+      drink.name.toUpperCase().includes(search.toUpperCase())
+    );
+    if (cocktailsType !== "0") {
+      newCocktails = newCocktails.filter((drink) =>
+        drink.type.includes(cocktailsType)
       );
-      const newCocktails = newData.filter(drink => drink.name.toUpperCase().includes(value.toUpperCase()))
-      setCoctails(newCocktails)
-    } catch (ex) {
-      alert(JSON.stringify(ex.response));
     }
-    setLoading(false)
-  }
+    setCoctails(newCocktails);
+    setLoading(false);
+  };
+
+  useEffect(SearchCocktails, [search, cocktailsType]);
 
   useEffect(() => {
     fetchDrinks();
@@ -48,12 +47,47 @@ export default function AllDrinks(props) {
 
   return (
     <div>
-      <input type="text" className="form-control mb-1" placeholder="Wyszukaj" value={search} onChange={e => inputChangeHandler(e.target.value)}/>
-      {loading ? <LoadingIcon /> : (<div className="card-group" style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {cocktails && cocktails.map((drink) => (
-          <DrinkCard key={drink.id} drink={drink} link={`/drinks/show/${drink.id}`} style={{ height: '10rem', objectFit: "cover" }} />
-        ))}
-      </div>)}
+      <div className="input-group mb-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Wyszukaj"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <div className="input-group-append">
+          <select
+            value={cocktailsType}
+            onChange={(e) => setCoctailsType(e.target.value)}
+            className="custom-select"
+          >
+            <option value="0">Wszystkie</option>
+            <option value="shot">Shot</option>
+            <option value="short">Short</option>
+            <option value="long">Long</option>
+            <option value="premium">Premium</option>
+          </select>
+        </div>
+      </div>
+
+      {loading ? (
+        <LoadingIcon />
+      ) : (
+        <div
+          className="card-group"
+          style={{ display: "flex", flexWrap: "wrap" }}
+        >
+          {cocktails &&
+            cocktails.map((drink) => (
+              <DrinkCard
+                key={drink.id}
+                drink={drink}
+                link={`/drinks/show/${drink.id}`}
+                style={{ height: "10rem", objectFit: "cover" }}
+              />
+            ))}
+        </div>
+      )}
     </div>
-  )
+  );
 }

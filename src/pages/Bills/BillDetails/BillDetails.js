@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axios from "../../../../axios";
+import axios from "../../../axios";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
-import { objectToArrayWithId } from "../../../../helpers/objects";
-import LoadingIcon from "../../../../UI/LoadingIcon/LoadingIcon";
+import { objectToArrayWithId } from "../../../helpers/objects";
+import LoadingIcon from "../../../UI/LoadingIcon/LoadingIcon";
 
 const BillDetails = () => {
   const { id } = useParams();

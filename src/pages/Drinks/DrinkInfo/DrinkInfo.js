@@ -181,7 +181,7 @@ export default function DrinkInfo(props) {
           <div className="d-flex align-items-stretch">
             <ModalNotification
               style={{ height: '2.3rem', fontSize: "0.9rem" }}
-              buttonText="Dodaj do rachunku"
+              buttonText="Zamów"
               message={`Czy na pewno chcesz dodać "${cocktail.name}" do rachunku? Nie będziesz mógł anulować tego zamówienia.`}
               buttonColor="success"
               onConfirm={handleAddToBill}

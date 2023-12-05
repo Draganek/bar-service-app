@@ -1,5 +1,4 @@
 import ProfileDetails from "./ProfileDetails/ProfileDetails";
-import Bills from "./Bills/Bills"
 import { Route, Switch, NavLink, useRouteMatch } from 'react-router-dom'
 import style from "./Profile.module.css"
 import useAuth from "../../hooks/useAuth";
@@ -25,14 +24,10 @@ export default function Profile(props) {
                     <li className="nav-item">
                         <NavLink className="nav-link" exact to={`${url}`}>Profil</NavLink>
                     </li>
-                    <li className="nav-item">
-                        <NavLink className="nav-link" to={`${url}/rachunki`}>Rachunki</NavLink>
-                    </li>
                 </ul>
                 <div className="pt-4">
 
                     <Switch>
-                        <Route path={`${path}/rachunki`} component={Bills} />
                         <Route path={`${path}`} component={ProfileDetails} />
                     </Switch>
 
