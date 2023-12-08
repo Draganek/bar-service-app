@@ -15,6 +15,7 @@ const BillDetails = () => {
   const [bill, setBill] = useState([]);
   const [loading, setLoading] = useState(true);
   const history = useHistory();
+  const [tip, setTip] = useState(0);
 
   const fetchBill = async () => {
     try {
@@ -31,7 +32,7 @@ const BillDetails = () => {
     setLoading(true);
     try {
       const res = await axios.get(`/bills/${id}.json`);
-      
+
       const check = objectToArrayWithId(res.data.items).filter(
         (drink) => drink.id === drinkId && drink.status === "3"
       );
@@ -46,6 +47,10 @@ const BillDetails = () => {
       alert(ex);
     }
     fetchBill();
+  };
+
+  const handleInputChange = (event) => {
+    setTip(parseInt(event.target.value, 10).toString());
   };
 
   const renderBill = (props) => {
@@ -85,6 +90,7 @@ const BillDetails = () => {
             </button>
             {product.status === "3" && (
               <ModalNotification
+                small={true}
                 buttonText="Usuń"
                 message={`Czy na pewno chcesz anulować zamówienie ${product.name}`}
                 onConfirm={(e) => {
@@ -94,8 +100,21 @@ const BillDetails = () => {
             )}
           </td>
         </tr>
-      ));
+      ))
     }
+  };
+
+  const handleBill = async (status) => {
+    const billChanges = { status: status }
+    if (parseInt(tip) > 0) {
+      billChanges.tip = tip;
+    }
+    try {
+      await axios.patch(`/bills/${id}.json?auth=${auth.token}`, billChanges);
+    } catch (ex) {
+      alert(ex.message);
+    }
+    fetchBill();
   };
 
   useEffect(() => {
@@ -105,7 +124,7 @@ const BillDetails = () => {
   return loading ? (
     <LoadingIcon />
   ) : (
-    <div style={{ fontSize: "0.8rem" }}>
+    <div style={{ fontSize: "0.9rem" }}>
       <div className="card">
         <div className="card-header">
           <h5 className="mb-2 card-header">Rachunek za zamówienia</h5>
@@ -119,13 +138,51 @@ const BillDetails = () => {
               <li className="list-group-item">
                 {" "}
                 Status rachunku:{" "}
+                {bill.status === "3" && (
+                  <span className="badge bg-info text-light">Zamykany</span>
+                )}
                 {bill.status === "2" && (
                   <span className="badge bg-warning text-light">
                     W akceptacji
                   </span>
                 )}
                 {bill.status === "1" && (
-                  <span className="badge bg-success text-light">Otwarty</span>
+                  <>
+                    <span className="badge bg-success text-light mr-3">
+                      Otwarty
+                    </span>
+                    <ModalNotification
+                      onConfirm={(e) => handleBill("3")}
+                      buttonColor="warning"
+                      message={
+                        <div>
+                          Czy chcesz poprosić o zamknięcie rachunku? Nie
+                          będziesz mógł dalej zamawiać.
+                          <div class="input-group flex-nowrap mt-4">
+                            <div class="input-group-prepend">
+                              <span
+                                class="input-group-text"
+                                id="addon-wrapping"
+                              >
+                                Zostaw napiwek jeżeli ci smakowało
+                              </span>
+                            </div>
+                            <input value={tip} onChange={e => handleInputChange(e)} type="number" class="form-control" />
+                            <div class="input-group-append">
+                              <span
+                                class="input-group-text"
+                                id="addon-wrapping"
+                              >
+                                zł
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      }
+                      small={true}
+                      buttonText="Poproś o zamknięcie"
+                    />
+                  </>
                 )}{" "}
                 {bill.status === "0" && (
                   <span className="badge bg-secondary text-light">
@@ -149,19 +206,25 @@ const BillDetails = () => {
             </thead>
             <tbody>{renderBill()}</tbody>
           </table>
+          {bill.tip && (<div className="ml-2" style={{ fontSize: "0.9rem"}}>
+            <b>Napiwek: </b>
+            {bill.tip}
+            zł
+          </div>)}
+
           {!bill.items && <p>Brak zamówień</p>}
         </div>
-        <div className="card-footer">
-          <span style={{ fontSize: "1rem" }}>
+        <div className="card-footer" >
+          <div className="text-right" style={{ fontSize: "1rem" }}>
             <b>Suma: </b>
             {bill.items
               ? objectToArrayWithId(bill.items).reduce(
-                  (total, item) => total + Number(item.price),
-                  0
-                )
+                (total, item) => { if (Number(item.status) < 2) { return total + Number(item.price) } else { return total } },
+                (bill.tip ? parseInt(bill.tip) : 0)
+              )
               : 0}
             zł
-          </span>
+          </div>
         </div>
       </div>
     </div>

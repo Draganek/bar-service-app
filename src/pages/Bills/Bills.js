@@ -82,7 +82,12 @@ export default function Bills() {
                 {bills.map((bill) => (
                   <tr key={bill.id} style={{ fontSize: "0.8rem" }}>
                     <td>
-                    {(bill.status) === "2" && (
+                      {bill.status === "3" && (
+                        <span className="badge bg-info text-light">
+                          Zamykany
+                        </span>
+                      )}
+                      {(bill.status) === "2" && (
                         <span className="badge bg-warning text-light">
                           W akceptacji
                         </span>
@@ -104,9 +109,9 @@ export default function Bills() {
                     <td>
                       {bill.items
                         ? objectToArrayWithId(bill.items).reduce(
-                            (total, item) => total + Number(item.price),
-                            0
-                          )
+                          (total, item) => { if (Number(item.status) < 2) { return total + Number(item.price) } else { return total } },
+                          (bill.tip ? parseInt(bill.tip) : 0)
+                        )
                         : 0}
                       zł
                     </td>

@@ -16,7 +16,7 @@ const AddDrink = (props) => {
         setLoading(true);
         try {
             await axios.post(`/cocktails.json?auth=${auth.token}`, form);
-            history.push('/services')
+            history.push('/services/drinks_database')
         } catch (ex) {
             if (ex.response.status === 401) {
                 handleToggleToast();

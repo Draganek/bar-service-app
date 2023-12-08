@@ -108,24 +108,33 @@ const BillService = () => {
                   <ModalNotification
                     onConfirm={e => handleBill("1")}
                     buttonColor="primary"
-                    message={`Czy chcesz otworzyć rachunek użytkownika "${bill.name}"`}
+                    message={`Czy chcesz otworzyć rachunek użytkownika "${bill.name}"?`}
                     small={true}
                     buttonText="Otwórz rachunek" />
                 </>
               )}
-              {parseInt(bill.status) === 1 && (
+              {(bill.status === '1' || bill.status === '3') && (
                 <>
-                  <span className="badge bg-success text-light mr-2">Otwarte</span>
+                  {bill.status === "3" && (
+                    <span className="badge bg-info text-light mr-3">
+                      Zamykany
+                    </span>
+                  )}
+                  {bill.status === "1" && (
+                    <span className="badge bg-success text-light mr-3">
+                      Otwarte
+                    </span>
+                  )}
                   <ModalNotification
                     onConfirm={e => handleBill("0")}
                     buttonColor="warning"
-                    message={`Czy chcesz otworzyć rachunek użytkownika "${bill.name}"`}
+                    message={`Czy chcesz zamknąć rachunek użytkownika "${bill.name}"?`}
                     small={true}
                     buttonText="Zamknij rachunek" />
                 </>
               )}
               {bill.status === "0" && (
-                <span className="badge bg-secondary text-light">Zamknięte</span>
+                <span className="badge bg-secondary text-light">Zamknięty</span>
               )}
             </li>
           </ul>
@@ -135,6 +144,7 @@ const BillService = () => {
 
 
         {waitingDrinks && waitingDrinks.length > 0 ? (
+          <div>
           <table
             className="table table-bordered"
             style={{ fontSize: "0.8rem" }}
@@ -226,8 +236,13 @@ const BillService = () => {
                   </td>
                 </tr>
               ))}
-            </tbody>
-          </table>
+            </tbody> 
+          </table> 
+          {bill.tip && (<div className="ml-2 mb-3" style={{ fontSize: "0.8rem"}}>
+          <b>Napiwek: </b>
+          {bill.tip}
+          zł
+        </div>)}</div>
         ) : (
           <h6 className="m-3 text-center">Nie znaleziono żadnego zamówienia</h6>
         )}
@@ -237,16 +252,16 @@ const BillService = () => {
 
 
         <div className="card-footer">
-          <span style={{ fontSize: "1rem" }}>
+          <div className="text-right mr-3" style={{ fontSize: "1rem" }}>
             <b>Suma: </b>
             {bill.items
               ? objectToArrayWithId(bill.items).reduce(
                 (total, item) => { if (Number(item.status) < 2) { return total + Number(item.price) } else { return total } },
-                0
+                (bill.tip ? parseInt(bill.tip) : 0)
               )
               : 0}
             zł
-          </span>
+          </div>
         </div>
       </div>
     </div>

@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import { objectToArrayWithId } from "../../../../helpers/objects";
 import useAuth from "../../../../hooks/useAuth";
 import LoadingIcon from "../../../../UI/LoadingIcon/LoadingIcon";
-import ModalNotification from "../../../../components/ModalNotification/ModalNotification";
-import ActualTime from "../../../../components/ActualTime/ActualTime";
 import ToastMessage from "../../../../components/ToastMessage/ToastMessage";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
@@ -42,20 +40,18 @@ export default function Approvals() {
     history.push(`/services/bill/${billId}`);
   };
 
-  const handleCloseBill = async (id) => {
-    try {
-      await axios.patch(`/bills/${id}.json?auth=${auth.token}`, {
-        status: "0",
-        endTime: ActualTime(),
-      });
-    } catch (ex) {
-      if (ex.response.status === 401) {
-        handleToggleToast();
-      } else {
-        setError(ex.message);
-      }
+  const calculateNotifications = (bill) => {
+    let notifications = 0;
+    if (bill.status === "3") {
+      notifications++;
     }
-    fetchBills();
+    objectToArrayWithId(bill.items).map(item => {
+      if (item.status === "0" || item.status === "3"){
+        notifications++
+      }
+    })
+
+    if(notifications) {return notifications} else{return ""};
   };
 
   return loading ? (
@@ -76,11 +72,20 @@ export default function Approvals() {
             {bills.map((bill) => (
               <tr key={bill.id}>
                 <td>
-                  {parseInt(bill.status) === 1 ? (
-                    <span className="badge bg-success text-light">Otwarte</span>
-                  ) : (
+                  {bill.status === "3" && (
+                    <span className="badge bg-info text-light">Zamykany</span>
+                  )}
+                  {bill.status === "2" && (
                     <span className="badge bg-warning text-light">
                       W akceptacji
+                    </span>
+                  )}
+                  {parseInt(bill.status) === 1 && (
+                    <span className="badge bg-success text-light">Otwarte</span>
+                  )}{" "}
+                  {bill.status === "0" && (
+                    <span className="badge bg-secondary text-light">
+                      Zamknięte
                     </span>
                   )}
                 </td>
@@ -96,8 +101,8 @@ export default function Approvals() {
                 <td>
                   {bill.items
                     ? objectToArrayWithId(bill.items).reduce(
-                        (total, item) => total + Number(item.price),
-                        0
+                        (total, item) => { if (Number(item.status) < 2) { return total + Number(item.price) } else { return total } },
+                        (bill.tip ? parseInt(bill.tip) : 0)
                       )
                     : 0}
                   zł
@@ -107,7 +112,10 @@ export default function Approvals() {
                     className="btn btn-sm btn-primary"
                     onClick={(event) => handleShowBill(bill.id)}
                   >
-                    Pokaż
+                    Pokaż{" "}
+                    <span class="badge badge-light">
+                      {calculateNotifications(bill)}
+                    </span>
                   </button>
                 </td>
               </tr>
