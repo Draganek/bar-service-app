@@ -10,6 +10,7 @@ export default function AllDrinks(props) {
   const [cocktails, setCoctails] = useState([]);
   const [loading, setLoading] = useState(true);
   const [cocktailsType, setCoctailsType] = useState("0");
+  const [sorting, setSorting] = useState('old')
 
   const fetchDrinks = async () => {
     try {
@@ -25,8 +26,23 @@ export default function AllDrinks(props) {
     setLoading(false);
   };
 
+  const sortCocktails = (cocktails) => {
+    
+    if(sorting === "new"){
+      return cocktails.reverse();
+    }
+    if(sorting === "cheap"){
+      return cocktails.sort((a, b) => Number(a.price) - Number(b.price));
+    }
+    if(sorting === "expensive"){
+      return cocktails.sort((a, b) => Number(b.price) - Number(a.price));
+    }
+    else{
+      return cocktails;
+    }
+  }
+
   const SearchCocktails = () => {
-    setLoading(true);
     let newCocktails = allCocktails.filter((drink) =>
       drink.name.toUpperCase().includes(search.toUpperCase())
     );
@@ -35,11 +51,10 @@ export default function AllDrinks(props) {
         drink.type.includes(cocktailsType)
       );
     }
-    setCoctails(newCocktails);
-    setLoading(false);
+    setCoctails(sortCocktails(newCocktails));
   };
 
-  useEffect(SearchCocktails, [search, cocktailsType]);
+  useEffect(SearchCocktails, [search, cocktailsType, sorting]);
 
   useEffect(() => {
     fetchDrinks();
@@ -55,7 +70,12 @@ export default function AllDrinks(props) {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <div className="input-group-append">
+      </div>
+      <div className="input-group mb-3">
+        <div className="input-group-prepend">
+          <label className="input-group-text">Rodzaj</label>
+        </div>
+        <div className="input-group-append ">
           <select
             value={cocktailsType}
             onChange={(e) => setCoctailsType(e.target.value)}
@@ -68,7 +88,25 @@ export default function AllDrinks(props) {
             <option value="premium">Premium</option>
           </select>
         </div>
+        <div className="input-group-prepend">
+          <label className="input-group-text">Sortuj</label>
+        </div>
+        <div className="input-group-append">
+          <select
+            value={sorting}
+            onChange={(e) => setSorting(e.target.value)}
+            className="custom-select"
+          >
+            <option value="old">Najstarsze</option>
+            <option value="new">Najnowsze</option>
+            <option value="cheap">Najtańsze</option>
+            <option value="expensive">Najdroższe</option>
+          </select>
+        </div>
+
       </div>
+
+
 
       {loading ? (
         <LoadingIcon />
