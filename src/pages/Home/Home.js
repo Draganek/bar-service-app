@@ -18,7 +18,7 @@ export default function Home(props) {
     <LoadingIcon />
   ) : (
     <>
-      <WhatNew />
+      <WhatNew/>
       <div className="pt-2">
         <Alert variant="secondary" className="pt-400">
           <Alert.Heading>Witaj {auth && (<span className="badge badge-secondary">{auth.name}</span>)} w Dragan Bar! </Alert.Heading>

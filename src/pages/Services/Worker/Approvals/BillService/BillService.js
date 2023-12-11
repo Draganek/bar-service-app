@@ -49,6 +49,22 @@ const BillService = () => {
     fetchBill();
   };
 
+  const closeBill = async () => {
+    try {
+      await axios.patch(`/bills/${id}.json?auth=${auth.token}`, {
+        endTime: ActualTime(),
+        status: "0",
+      });
+    } catch (ex) {
+      if (ex.response.status === 401) {
+        handleToggleToast();
+      } else {
+        setError(ex.message);
+      }
+    }
+    fetchBill();
+  }
+
   const handleBill = async (status) => {
     try {
       await axios.patch(`/bills/${id}.json?auth=${auth.token}`, {
@@ -122,11 +138,11 @@ const BillService = () => {
                   )}
                   {bill.status === "1" && (
                     <span className="badge bg-success text-light mr-3">
-                      Otwarte
+                      Otwarty
                     </span>
                   )}
                   <ModalNotification
-                    onConfirm={e => handleBill("0")}
+                    onConfirm={e => closeBill()}
                     buttonColor="warning"
                     message={`Czy chcesz zamknąć rachunek użytkownika "${bill.name}"?`}
                     small={true}
@@ -145,104 +161,105 @@ const BillService = () => {
 
         {waitingDrinks && waitingDrinks.length > 0 ? (
           <div>
-          <table
-            className="table table-bordered"
-            style={{ fontSize: "0.8rem" }}
-          >
-            <thead>
-              <tr>
-                <th>Status</th>
-                <th>Drink</th>
-                <th>Cena</th>
-                <th>Opcje</th>
-              </tr>
-            </thead>
-            <tbody>
-              {waitingDrinks.map((order) => (
-                <tr key={order.id}>
-                  <td>
-                    {parseInt(order.status) === 0 && (
-                      <span className="badge bg-primary text-light">
-                        Zaakceptowany
-                      </span>
-                    )}
-                    {parseInt(order.status) === 1 && (
-                      <span className="badge bg-success text-light">
-                        Wydany
-                      </span>
-                    )}
-                    {parseInt(order.status) === 2 && (
-                      <span className="badge bg-danger text-light">
-                        Anulowany
-                      </span>
-                    )}
-                    {parseInt(order.status) === 3 && (
-                      <span className="badge bg-warning text-light">
-                        W akceptacji
-                      </span>
-                    )}
-                  </td>
-                  <td>
-                    {order.name}
-                  </td>
-                  <td>{order.price}zł</td>
-                  <td>
-
-                    {order.status === "3" && (
-                      <ModalNotification
-                        disabled={order.status === "1"}
-                        onConfirm={(event) =>
-                          handleDrinkStatus(order.id, "0")
-                        }
-                        message={`Czy na pewno chcesz zmienić status drinka ${order.name} na zaakceptowany?`}
-                        buttonText="Akceptuj"
-                        buttonColor="success"
-                        small={true}
-                      />
-                    )}
-
-                    {order.status === "0" && (
-                      <ModalNotification
-                        disabled={order.status === "1"}
-                        onConfirm={(event) =>
-                          handleDrinkStatus(order.id, "1")
-                        }
-                        message="Czy na pewno chcesz potwierdzić wydanie drinka dla tego użytkownika?"
-                        buttonText="Wydaj"
-                        buttonColor="success"
-                        small={true}
-                      />
-                    )}
-
-                    <Link
-                      to={`/drinks/show/${order.drinkId}`}
-                      className="btn btn-sm btn-primary"
-                    >
-                      Info
-                    </Link>
-
-                    {order.status === "0" && (
-                      <ModalNotification
-                        disabled={order.status === "1"}
-                        onConfirm={(event) =>
-                          handleDrinkStatus(order.id, "2")
-                        }
-                        message="Czy na pewno chcesz anulować to zamówienie?"
-                        buttonText="Anuluj"
-                        buttonColor="danger"
-                        small={true}
-                      />
-                    )}
-                  </td>
+            <table
+              className="table table-bordered"
+              style={{ fontSize: "0.8rem" }}
+            >
+              <thead>
+                <tr style={{ textAlign: "center" }}>
+                  <th>Status</th>
+                  <th>Drink</th>
+                  <th>Cena</th>
+                  <th>Opcje</th>
                 </tr>
-              ))}
-            </tbody> 
-          </table> 
-          {bill.tip && (<div className="ml-2 mb-3" style={{ fontSize: "0.8rem"}}>
-          <b>Napiwek: </b>
-          {bill.tip}
-          zł
-        </div>)}</div>
+              </thead>
+              <tbody>
+                {waitingDrinks.map((order) => (
+                  <tr key={order.id}>
+                    <td style={{ padding: "0.1rem", textAlign: "center", verticalAlign: "middle" }}>
+                      {parseInt(order.status) === 0 && (
+                        <span className="badge bg-primary text-light">
+                          Zaakceptowany
+                        </span>
+                      )}
+                      {parseInt(order.status) === 1 && (
+                        <span className="badge bg-success text-light">
+                          Wydany
+                        </span>
+                      )}
+                      {parseInt(order.status) === 2 && (
+                        <span className="badge bg-danger text-light">
+                          Anulowany
+                        </span>
+                      )}
+                      {parseInt(order.status) === 3 && (
+                        <span className="badge bg-warning text-light">
+                          W akceptacji
+                        </span>
+                      )}
+                    </td>
+                    <td style={{ padding: "0.1rem", textAlign: "center", verticalAlign: "middle" }}>
+                      {order.name}
+                    </td>
+                    <td style={{ padding: "0", textAlign: "center", verticalAlign: "middle" }}>{order.price}zł</td>
+                    <td style={{ padding: "0.1rem", textAlign: "center" }}>
+
+                      {order.status === "3" && (
+                        <ModalNotification
+                          disabled={order.status === "1"}
+                          onConfirm={(event) =>
+                            handleDrinkStatus(order.id, "0")
+                          }
+                          message={`Czy na pewno chcesz zmienić status drinka ${order.name} na zaakceptowany?`}
+                          buttonText="Akceptuj"
+                          buttonColor="success"
+                          small={true}
+                        />
+                      )}
+
+                      {order.status === "0" && (
+                        <ModalNotification
+                          disabled={order.status === "1"}
+                          onConfirm={(event) =>
+                            handleDrinkStatus(order.id, "1")
+                          }
+                          message="Czy na pewno chcesz potwierdzić wydanie drinka dla tego użytkownika?"
+                          buttonText="Wydaj"
+                          buttonColor="success"
+                          small={true}
+                        />
+                      )}
+
+                      {order.status === "0" && (
+                        <ModalNotification
+                          disabled={order.status === "1"}
+                          onConfirm={(event) =>
+                            handleDrinkStatus(order.id, "2")
+                          }
+                          message="Czy na pewno chcesz anulować to zamówienie?"
+                          buttonText="Anuluj"
+                          buttonColor="danger"
+                          small={true}
+                        />
+                      )}
+
+                      <Link
+                        to={`/drinks/show/${order.drinkId}`}
+                        className="btn btn-sm btn-primary"
+                      >
+                        Info
+                      </Link>
+
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {bill.tip && (<div className="ml-2 mb-3" style={{ fontSize: "0.8rem" }}>
+              <b>Napiwek: </b>
+              {bill.tip}
+              zł
+            </div>)}</div>
         ) : (
           <h6 className="m-3 text-center">Nie znaleziono żadnego zamówienia</h6>
         )}

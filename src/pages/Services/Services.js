@@ -15,7 +15,7 @@ export default function Services(props) {
 
 
         <div className="card">
-            <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: "0.5rem" }}>
                 <h4>Obsługa</h4>
                 <ul className="nav nav-pills" style={{fontSize: "0.9rem"}}>
                     <li className="nav-item">
@@ -28,7 +28,7 @@ export default function Services(props) {
 
                 </ul>
             </div>
-            <div className="card-body">
+            <div className="card-body" style={{padding: "0"}}>
                 <ul className="nav nav-tabs" style={{fontSize: "0.9rem"}}>
 
                     <li className="nav-item">
@@ -38,7 +38,7 @@ export default function Services(props) {
                         <NavLink className="nav-link" exact to={`${url}/drinks_database`}>Baza</NavLink>
                     </li>
                 </ul>
-                <div className="pt-4">
+                <div className="pt-3">
 
                     <Switch>
 

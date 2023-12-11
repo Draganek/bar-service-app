@@ -61,7 +61,7 @@ export default function Approvals() {
       {bills.length ? (
         <table className="table table-bordered">
           <thead>
-            <tr>
+            <tr style={{textAlign: "center"}}>
               <th>Status</th>
               <th>Imię</th>
               <th>Suma</th>
@@ -71,34 +71,30 @@ export default function Approvals() {
           <tbody>
             {bills.map((bill) => (
               <tr key={bill.id}>
-                <td>
+                <td style={{padding: "0.5rem", textAlign: "center", verticalAlign: "middle"}}>
                   {bill.status === "3" && (
-                    <span className="badge bg-info text-light">Zamykany</span>
+                    <span style={{padding: "0.3rem"}} className="badge bg-info text-light">Zamykany</span>
                   )}
                   {bill.status === "2" && (
-                    <span className="badge bg-warning text-light">
+                    <span style={{padding: "0.3rem"}} className="badge bg-warning text-light">
                       W akceptacji
                     </span>
                   )}
                   {parseInt(bill.status) === 1 && (
-                    <span className="badge bg-success text-light">Otwarte</span>
+                    <span style={{padding: "0.3rem"}} className="badge bg-success text-light">Otwarty</span>
                   )}{" "}
                   {bill.status === "0" && (
                     <span className="badge bg-secondary text-light">
-                      Zamknięte
+                      Zamknięty
                     </span>
                   )}
                 </td>
                 <td
-                  style={{
-                    wordWrap: "break-word",
-                    wordBreak: "break-all",
-                    whiteSpace: "pre-line",
-                  }}
+                  style={{padding: "0.5rem", textAlign: "center", verticalAlign: "middle"}}
                 >
                   {bill.name}
                 </td>
-                <td>
+                <td style={{padding: "0.5rem", textAlign: "center", verticalAlign: "middle"}}>
                   {bill.items
                     ? objectToArrayWithId(bill.items).reduce(
                         (total, item) => { if (Number(item.status) < 2) { return total + Number(item.price) } else { return total } },
@@ -107,7 +103,7 @@ export default function Approvals() {
                     : 0}
                   zł
                 </td>
-                <td>
+                <td style={{padding: "0.2rem", textAlign: "center", verticalAlign: "middle"}}>
                   <button
                     className="btn btn-sm btn-primary"
                     onClick={(event) => handleShowBill(bill.id)}
@@ -123,7 +119,9 @@ export default function Approvals() {
           </tbody>
         </table>
       ) : (
-        <h6>Nie znaleziono żadnego rachunku do zatwierdzenia</h6>
+        (<div className="alert alert-warning w-100 text-center" role="alert">
+            <h6>Nie znaleziono aktywnego rachunku</h6>
+          </div>)
       )}
       {error && <span className="alert alert-danger">{error}</span>}
       {toastActive && (

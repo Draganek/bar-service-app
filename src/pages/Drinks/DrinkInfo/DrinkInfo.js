@@ -34,10 +34,7 @@ export default function DrinkInfo(props) {
         (bill) => parseInt(bill.status) === 1 && bill.user_id === auth.userId
       );
       setActiveBill(bill[0]);
-      
-    } catch (ex) {
-      
-    }
+    } catch (ex) {}
     setLoading(false);
   };
 
@@ -49,9 +46,18 @@ export default function DrinkInfo(props) {
   const handleAddToBill = async (props) => {
     if (activeBill) {
       setLoading(true);
-      const items = { name: cocktail.name, price: cocktail.price, status: '3', drinkId: id, user: auth.userId }
+      const items = {
+        name: cocktail.name,
+        price: cocktail.price,
+        status: "3",
+        drinkId: id,
+        user: auth.userId,
+      };
       try {
-        await axios.post(`/bills/${activeBill.id}/items.json?auth=${auth.token}`, items);
+        await axios.post(
+          `/bills/${activeBill.id}/items.json?auth=${auth.token}`,
+          items
+        );
         setMessage("Pomyślnie dodano drinka do rachunku!");
       } catch (ex) {
         handleToggleToast();
@@ -65,7 +71,7 @@ export default function DrinkInfo(props) {
 
   const handleToggleToast = () => {
     setToastActive(!toastActive);
-};
+  };
 
   return loading ? (
     <LoadingIcon />
@@ -80,21 +86,27 @@ export default function DrinkInfo(props) {
       <div className="card-header">
         <h3 className="card-title text-center">{cocktail.name}</h3>
       </div>
-      <div style={{fontSize: "0.9rem"}} className="card-body">
+      <div style={{ fontSize: "0.9rem" }} className="card-body">
         <p className="card-text">
           <b>Opis: </b>
           {cocktail.description}
         </p>
       </div>
 
-      <ul style={{fontSize: "0.9rem"}} className="list-group list-group-flush">
+      <ul
+        style={{ fontSize: "0.9rem" }}
+        className="list-group list-group-flush"
+      >
         {cocktail.alcohols && (
           <li className="list-group-item">
             <span className="card-text">
               <b>Alkohole: </b>
               {cocktail.alcohols.map((alcohol, index) => (
                 <React.Fragment key={index}>
-                  <a>{alcohol.name}{auth && auth.perm > 0 && ` ${alcohol.ml}ml`}</a>
+                  <a>
+                    {alcohol.name}
+                    {auth && auth.perm > 0 && ` ${alcohol.ml}ml`}
+                  </a>
                   {index !== cocktail.alcohols.length - 1 && <a>, </a>}
                 </React.Fragment>
               ))}
@@ -108,7 +120,10 @@ export default function DrinkInfo(props) {
               <b>Napoje: </b>
               {cocktail.fillers.map((filler, index) => (
                 <React.Fragment key={index}>
-                  <a>{filler.name}{auth && auth.perm > 0 && ` ${filler.ml}ml`}</a>
+                  <a>
+                    {filler.name}
+                    {auth && auth.perm > 0 && ` ${filler.ml}ml`}
+                  </a>
                   {index !== cocktail.fillers.length - 1 && <a>, </a>}
                 </React.Fragment>
               ))}
@@ -122,7 +137,10 @@ export default function DrinkInfo(props) {
               <b>Dodatki: </b>
               {cocktail.accessories.map((accessorie, index) => (
                 <React.Fragment key={index}>
-                  <a>{accessorie.name}{auth && auth.perm > 0 && ` x${accessorie.ml}`}</a>
+                  <a>
+                    {accessorie.name}
+                    {auth && auth.perm > 0 && ` x${accessorie.ml}`}
+                  </a>
                   {index !== cocktail.accessories.length - 1 && <a>, </a>}
                 </React.Fragment>
               ))}
@@ -139,14 +157,17 @@ export default function DrinkInfo(props) {
         </li>
         <li className="list-group-item">
           <p className="card-text">
-            <b>Metoda mieszania: </b>
-            {cocktail.method}
+            <b>Metoda: </b>
+            {cocktail.method === "shake" && "Wstrząśnięte"}
+            {cocktail.method === "mix" && "Mieszane"}
           </p>
         </li>
         <li className="list-group-item">
           <p className="card-text">
             <b>Szkło: </b>
-            {cocktail.glass}
+            {cocktail.glass === "wine" && "Kieliszek"}
+            {cocktail.glass === "short" && "Niskie"}
+            {cocktail.glass === "high" && "Wysokie"}
           </p>
         </li>
         <li className="list-group-item">
@@ -158,37 +179,72 @@ export default function DrinkInfo(props) {
       </ul>
 
       <div className="card-body">
-        <p style={{fontSize: "0.9rem"}} className="card-text">
+        <p style={{ fontSize: "0.9rem" }} className="card-text">
           {!error && message ? (
-            <span className="text-success">{message}</span>
-          ) : auth ? (activeBill &&
-            activeBill.status === '1' ? (
-              <span className="text-success">
+            <span
+              style={{
+                fontSize: "0.8rem",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+              className="alert alert-success d-flex justify-content-center"
+            >
+              {message}
+            </span>
+          ) : auth ? (
+            activeBill && activeBill.status === "1" ? (
+              <span
+                style={{
+                  fontSize: "0.8rem",
+                  alignItems: "center",
+                  textAlign: "center",
+                }}
+                className="alert alert-success d-flex justify-content-center"
+              >
                 Masz otwarty rachunek! Możesz zamówić produkt.
               </span>
             ) : (
-              <span>
+              <span
+                style={{
+                  fontSize: "0.8rem",
+                  alignItems: "center",
+                  textAlign: "center",
+                }}
+                className="alert alert-warning d-flex justify-content-center"
+              >
                 Nie masz otwartego rachunku. Otwórz go w opcjach profilu.
               </span>
             )
           ) : (
-            <a className="text-danger">
+            <span
+              style={{
+                fontSize: "0.8rem",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+              className="alert alert-danger d-flex justify-content-center"
+            >
               Musisz być zalogowany żeby dodać produkt do rachunku!
-            </a>
+            </span>
           )}
         </p>
         {auth && activeBill && (
           <div className="d-flex align-items-stretch">
             <ModalNotification
-              style={{ height: '2.3rem', fontSize: "0.9rem" }}
-              buttonText="Zamów"
-              message={`Czy na pewno chcesz dodać "${cocktail.name}" do rachunku? Nie będziesz mógł anulować tego zamówienia.`}
-              buttonColor="success"
+              style={{ fontSize: "0.9rem" }}
+              width="100"
+              buttonText="Zamów drinka!"
+              confirmation="Oczywiście!"
+              message={`Czy na pewno chcesz dodać "${cocktail.name}" do rachunku?`}
+              buttonColor="primary"
               onConfirm={handleAddToBill}
             />
             <div className="flex-grow-1 ml-2">
               {toastActive && (
-                <ToastMessage isActive={toastActive} onToggle={handleToggleToast} />
+                <ToastMessage
+                  isActive={toastActive}
+                  onToggle={handleToggleToast}
+                />
               )}
             </div>
           </div>

@@ -68,7 +68,7 @@ export default function Bills() {
       {
         <div>
           {bills.length ? (
-            <table className="table table-bordered">
+            <table className="table table-bordered" style={{ marginBottom: "0.3rem" }}>
               <thead>
                 <tr style={{ fontSize: "0.8rem" }}>
                   <th>Status</th>
@@ -78,35 +78,35 @@ export default function Bills() {
                   <th>Opcje</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody >
                 {bills.map((bill) => (
                   <tr key={bill.id} style={{ fontSize: "0.8rem" }}>
-                    <td>
+                    <td style={{ padding: "0.5rem", textAlign: "center" }}>
                       {bill.status === "3" && (
-                        <span className="badge bg-info text-light">
+                        <span style={{ padding: "0.3rem" }} className="badge bg-info text-light">
                           Zamykany
                         </span>
                       )}
                       {(bill.status) === "2" && (
-                        <span className="badge bg-warning text-light">
+                        <span style={{ padding: "0.3rem" }} className="badge bg-warning text-light">
                           W akceptacji
                         </span>
                       )}
                       {parseInt(bill.status) === 1 && (
-                        <span className="badge bg-success text-light">
-                          Otwarte
+                        <span style={{ padding: "0.3rem" }} className="badge bg-success text-light">
+                          Otwarty
                         </span>
                       )}  {(bill.status) === "0" && (
-                        <span className="badge bg-secondary text-light">
-                          Zamknięte
+                        <span style={{ padding: "0.3rem" }} className="badge bg-secondary text-light">
+                          Zamknięty
                         </span>
                       )}
                     </td>
-                    <td>{bill.date}</td>
-                    <td>
+                    <td style={{ padding: "0.5rem", textAlign: "center" }}>{bill.date}</td>
+                    <td style={{ padding: "0.5rem", textAlign: "center" }}>
                       {bill.items ? objectToArrayWithId(bill.items).length : 0}
                     </td>
-                    <td>
+                    <td style={{ padding: "0.5rem", textAlign: "center" }}>
                       {bill.items
                         ? objectToArrayWithId(bill.items).reduce(
                           (total, item) => { if (Number(item.status) < 2) { return total + Number(item.price) } else { return total } },
@@ -115,7 +115,7 @@ export default function Bills() {
                         : 0}
                       zł
                     </td>
-                    <td>
+                    <td style={{ padding: "0.2rem", textAlign: "center" }}>
                       <Link
                         to={`/bills/${bill.id}`}
                         className="btn btn-sm btn-warning"
@@ -132,15 +132,15 @@ export default function Bills() {
           )}
           {bills.some((bill) => parseInt(bill.status) > 0) ? (
             <span
-              style={{ fontSize: "0.8rem" }}
-              className="alert alert-warning"
+              style={{ fontSize: "0.8rem", alignItems: "center" }}
+              className="alert alert-warning d-flex justify-content-center"
             >
               Możesz mieć tylko jeden otwarty rachunek.
             </span>
           ) : (
             <LoadingButton
               loading={loading}
-              className="btn btn-primary"
+              className="btn btn-primary d-flex justify-content-center align-items-center mx-auto"
               onClick={addBillHandler}
             >
               Otwórz nowy rachunek

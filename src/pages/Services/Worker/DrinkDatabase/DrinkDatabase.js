@@ -54,7 +54,7 @@ export default function DrinkDatabase() {
       {cocktails.length > 0 ? (
         <table className="table table-bordered" style={{fontSize: "0.8rem"}}>
           <thead>
-            <tr>
+            <tr style={{textAlign: "center"}}>
               <th>Nazwa</th>
               <th>Status</th>
               <th>Cena</th>
@@ -64,18 +64,18 @@ export default function DrinkDatabase() {
           <tbody>
             {cocktails.map((cocktail) => (
               <tr key={cocktail.id}>
-                <td>{cocktail.name}</td>
-                <td>
+                <td style={{padding: "0", textAlign: "center", verticalAlign: "middle", maxWidth: "7rem"}}>{cocktail.name}</td>
+                <td style={{padding: "0", textAlign: "center", verticalAlign: "middle"}}>
                   {parseInt(cocktail.status) === 1 ? (
-                    <span className="badge bg-success text-light">Aktywny</span>
+                    <span style={{padding: "0.3rem"}} className="badge bg-success text-light">Aktywny</span>
                   ) : (
-                    <span className="badge bg-secondary text-light">
+                    <span style={{padding: "0.3rem"}} className="badge bg-secondary text-light">
                       Ukryty
                     </span>
                   )}
                 </td>
-                <td>{cocktail.price}zł</td>
-                <td>
+                <td style={{padding: "0", textAlign: "center", verticalAlign: "middle"}}>{cocktail.price}zł</td>
+                <td style={{padding: "0.1rem", textAlign: "center", verticalAlign: "middle"}}>
                   <Link
                     to={`/services/drinks_database/edytuj/${cocktail.id}`}
                     className="btn btn-sm btn-warning"

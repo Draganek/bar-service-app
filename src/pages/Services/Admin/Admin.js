@@ -14,7 +14,7 @@ export default function Services(props) {
 
 
         <div className="card">
-            <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: "0.5rem" }}>
                 <h4>System</h4>
                 <ul className="nav nav-pills" style={{fontSize: "0.9rem"}}>
                     <li className="nav-item">

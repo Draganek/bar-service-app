@@ -110,8 +110,8 @@ export default function RandomDrink(props) {
             src={randomDrinkImage}
             className="card-img-top"
             style={{
-              height: "20rem",
-              width: "20rem",
+              height: "15rem",
+              width: "15rem",
             }}
             alt="..."
           />

@@ -27,17 +27,17 @@ export default function AllDrinks(props) {
   };
 
   const sortCocktails = (cocktails) => {
-    
-    if(sorting === "new"){
+
+    if (sorting === "new") {
       return cocktails.reverse();
     }
-    if(sorting === "cheap"){
+    if (sorting === "cheap") {
       return cocktails.sort((a, b) => Number(a.price) - Number(b.price));
     }
-    if(sorting === "expensive"){
+    if (sorting === "expensive") {
       return cocktails.sort((a, b) => Number(b.price) - Number(a.price));
     }
-    else{
+    else {
       return cocktails;
     }
   }
@@ -62,7 +62,7 @@ export default function AllDrinks(props) {
 
   return (
     <div>
-      <div className="input-group mb-3">
+      <div className="input-group mb-2">
         <input
           type="text"
           className="form-control"
@@ -73,40 +73,35 @@ export default function AllDrinks(props) {
       </div>
       <div className="input-group mb-3">
         <div className="input-group-prepend">
-          <label className="input-group-text">Rodzaj</label>
+          <label style={{ fontSize: "0.9rem" }} className="input-group-text">Typ</label>
         </div>
-        <div className="input-group-append ">
-          <select
-            value={cocktailsType}
-            onChange={(e) => setCoctailsType(e.target.value)}
-            className="custom-select"
-          >
-            <option value="0">Wszystkie</option>
-            <option value="shot">Shot</option>
-            <option value="short">Short</option>
-            <option value="long">Long</option>
-            <option value="premium">Premium</option>
-          </select>
-        </div>
+        <select
+          value={cocktailsType}
+          onChange={(e) => setCoctailsType(e.target.value)}
+          className="custom-select"
+          style={{ fontSize: "0.9rem" }}
+        >
+          <option value="0">Każdy</option>
+          <option value="shot">Shot</option>
+          <option value="short">Short</option>
+          <option value="long">Long</option>
+          <option value="premium">Premium</option>
+        </select>
         <div className="input-group-prepend">
-          <label className="input-group-text">Sortuj</label>
+          <label style={{ fontSize: "0.9rem" }} className="input-group-text">Sortuj</label>
         </div>
-        <div className="input-group-append">
-          <select
-            value={sorting}
-            onChange={(e) => setSorting(e.target.value)}
-            className="custom-select"
-          >
-            <option value="old">Najstarsze</option>
-            <option value="new">Najnowsze</option>
-            <option value="cheap">Najtańsze</option>
-            <option value="expensive">Najdroższe</option>
-          </select>
-        </div>
-
+        <select
+          value={sorting}
+          onChange={(e) => setSorting(e.target.value)}
+          className="custom-select"
+          style={{ fontSize: "0.9rem" }}
+        >
+          <option value="old">Najstarsze</option>
+          <option value="new">Najnowsze</option>
+          <option value="cheap">Najtańsze</option>
+          <option value="expensive">Najdroższe</option>
+        </select>
       </div>
-
-
 
       {loading ? (
         <LoadingIcon />
@@ -124,6 +119,9 @@ export default function AllDrinks(props) {
                 style={{ height: "10rem", objectFit: "cover" }}
               />
             ))}
+          {cocktails.length === 0 && (<div className="alert alert-warning w-100 text-center" role="alert">
+            Brak drinków do wyświetlenia
+          </div>)}
         </div>
       )}
     </div>

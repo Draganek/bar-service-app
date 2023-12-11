@@ -81,7 +81,7 @@ const BillDetails = () => {
           )}
 
           <td>{product.price}zł</td>
-          <td>
+          <td style={{ padding: "0.2rem" }}>
             <button
               onClick={(e) => history.push(`/drinks/show/${product.drinkId}`)}
               className="btn btn-sm btn-primary"
@@ -126,10 +126,10 @@ const BillDetails = () => {
   ) : (
     <div style={{ fontSize: "0.9rem" }}>
       <div className="card">
-        <div className="card-header">
+        <div className="card-header" style={{ paddingLeft: "0", paddingRight: "0" }}>
           <h5 className="mb-2 card-header">Rachunek za zamówienia</h5>
           <div className="card">
-            <ul className="list-group ">
+            <ul className="list-group" >
               <li className="list-group-item">Data: {bill.date}r</li>
               <li className="list-group-item">Rozpoczęcie {bill.startTime}</li>
               {bill.endTime ? (
@@ -164,7 +164,7 @@ const BillDetails = () => {
                                 class="input-group-text"
                                 id="addon-wrapping"
                               >
-                                Zostaw napiwek jeżeli ci smakowało
+                                Jeżeli chcesz zostaw napiwek
                               </span>
                             </div>
                             <input value={tip} onChange={e => handleInputChange(e)} type="number" class="form-control" />
@@ -180,7 +180,7 @@ const BillDetails = () => {
                         </div>
                       }
                       small={true}
-                      buttonText="Poproś o zamknięcie"
+                      buttonText="Zamknij Rachunek"
                     />
                   </>
                 )}{" "}
@@ -193,10 +193,10 @@ const BillDetails = () => {
             </ul>
           </div>
         </div>
-        <div className="card-body">
+        <div className="card-body" style={{ padding: "0" }}>
           <table className="table ">
             <thead>
-              <tr>
+              <tr style={{ textAlign: "center" }}>
                 <th scope="col">#</th>
                 <th scope="col">Produkt</th>
                 <th scope="col">Status</th>
@@ -204,15 +204,20 @@ const BillDetails = () => {
                 <th scope="col">Opcje</th>
               </tr>
             </thead>
-            <tbody>{renderBill()}</tbody>
+            <tbody style={{ padding: "0.2rem", textAlign: "center" }}>{renderBill()}</tbody>
           </table>
-          {bill.tip && (<div className="ml-2" style={{ fontSize: "0.9rem"}}>
+          {bill.tip && (<div className="ml-2" style={{ fontSize: "0.9rem" }}>
             <b>Napiwek: </b>
             {bill.tip}
             zł
           </div>)}
 
-          {!bill.items && <p>Brak zamówień</p>}
+          {!bill.items && <span
+            style={{ fontSize: "0.8rem" }}
+            className="alert alert-warning text-dark d-flex justify-content-center align-items-center w-100"
+          >
+            Brak zamówień
+          </span>}
         </div>
         <div className="card-footer" >
           <div className="text-right" style={{ fontSize: "1rem" }}>
