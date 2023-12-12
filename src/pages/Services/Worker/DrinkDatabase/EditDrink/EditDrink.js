@@ -4,7 +4,7 @@ import useAuth from "../../../../../hooks/useAuth";
 import DrinkForm from "../../../../Services/Worker/DrinkDatabase/DrinkForm/DrinkForm"
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
-import ToastMessage from "../../../../../components/ToastMessage/ToastMessage";
+import TokenNotification from "../../../../../components/TokenNotification/TokenNotification";
 
 const EditDrink = (props) => {
     const { id } = useParams();
@@ -12,17 +12,17 @@ const EditDrink = (props) => {
     const [drink, setDrink] = useState(null);
     const [auth] = useAuth();
     const [error, setError] = useState("");
-    const [toastActive, setToastActive] = useState(false);
     const [loading, setLoading] = useState(false)
+    const [tokenInactive, setTokenInactive] = useState(false);
 
     const submit = async form => {
         setLoading(true)
         try {
-            await axios.patch(`/cocktails/${id}.json?auth=${auth.token}`, form);
+            await axios.patch(`/cocktails/${id}.json?auth=${auth.token+"df"}`, form);
             history.push('/services/drinks_database')
         } catch (ex) {
             if (ex.response.status === 401) {
-                handleToggleToast();
+                setTokenInactive(true)
             } else {
                 setError(ex.message);
             }
@@ -42,10 +42,6 @@ const EditDrink = (props) => {
         fetchHotel();
     }, [])
 
-    const handleToggleToast = () => {
-        setToastActive(!toastActive);
-    };
-
     return (
         <div className="card">
             <div className="card-header">Edytuj drink</div>
@@ -60,9 +56,10 @@ const EditDrink = (props) => {
 
             </div>
             {error && <span className="alert alert-danger">{error}</span>}
-            {toastActive && (
-                <ToastMessage isActive={toastActive} onToggle={handleToggleToast} />
-            )}
+            <TokenNotification
+                showNotification={tokenInactive}
+                onClose={() => { setTokenInactive(false) }}
+            />
         </div>
     );
 };

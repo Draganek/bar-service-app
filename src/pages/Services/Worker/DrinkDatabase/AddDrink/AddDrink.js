@@ -3,14 +3,14 @@ import axios from "../../../../../axios";
 import { useHistory } from 'react-router-dom';
 import useAuth from "../../../../../hooks/useAuth";
 import DrinkForm from "../DrinkForm/DrinkForm";
-import ToastMessage from "../../../../../components/ToastMessage/ToastMessage";
+import TokenNotification from "../../../../../components/TokenNotification/TokenNotification";
 
 const AddDrink = (props) => {
     const history = useHistory();
     const [auth] = useAuth();
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("");
-    const [toastActive, setToastActive] = useState(false);
+    const [tokenInactive, setTokenInactive] = useState(false);
 
     const submit = async form => {
         setLoading(true);
@@ -19,7 +19,7 @@ const AddDrink = (props) => {
             history.push('/services/drinks_database')
         } catch (ex) {
             if (ex.response.status === 401) {
-                handleToggleToast();
+                setTokenInactive(true)
             } else {
                 setError(ex.message);
             }
@@ -27,10 +27,6 @@ const AddDrink = (props) => {
         }
 
     }
-
-    const handleToggleToast = () => {
-        setToastActive(!toastActive);
-    };
 
     return (
         <div className="card">
@@ -44,9 +40,10 @@ const AddDrink = (props) => {
                     loading={loading} />
             </div>
             {error && <span className="alert alert-danger">{error}</span>}
-            {toastActive && (
-                <ToastMessage isActive={toastActive} onToggle={handleToggleToast} />
-            )}
+            <TokenNotification
+                showNotification={tokenInactive}
+                onClose={() => { setTokenInactive(false) }}
+            />
         </div>
     );
 };

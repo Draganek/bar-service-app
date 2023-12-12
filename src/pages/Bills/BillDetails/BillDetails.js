@@ -7,7 +7,8 @@ import {
 import { objectToArrayWithId } from "../../../helpers/objects";
 import LoadingIcon from "../../../UI/LoadingIcon/LoadingIcon";
 import useAuth from "../../../hooks/useAuth";
-import ModalNotification from "../../../components/ModalNotification/ModalNotification";
+import ModalNotification from "../../../components/ModalNotificationButton/ModalNotificationButton";
+import TokenNotification from "../../../components/TokenNotification/TokenNotification";
 
 const BillDetails = () => {
   const { id } = useParams();
@@ -16,6 +17,7 @@ const BillDetails = () => {
   const [loading, setLoading] = useState(true);
   const history = useHistory();
   const [tip, setTip] = useState(0);
+  const [tokenInactive, setTokenInactive] = useState(false);
 
   const fetchBill = async () => {
     try {
@@ -44,7 +46,7 @@ const BillDetails = () => {
         alert("Zamówienie zostało już zaakceptowane");
       }
     } catch (ex) {
-      alert(ex);
+      setTokenInactive(true);
     }
     fetchBill();
   };
@@ -100,19 +102,19 @@ const BillDetails = () => {
             )}
           </td>
         </tr>
-      ))
+      ));
     }
   };
 
   const handleBill = async (status) => {
-    const billChanges = { status: status }
+    const billChanges = { status: status };
     if (parseInt(tip) > 0) {
       billChanges.tip = tip;
     }
     try {
       await axios.patch(`/bills/${id}.json?auth=${auth.token}`, billChanges);
     } catch (ex) {
-      alert(ex.message);
+      setTokenInactive(true);
     }
     fetchBill();
   };
@@ -126,10 +128,13 @@ const BillDetails = () => {
   ) : (
     <div style={{ fontSize: "0.9rem" }}>
       <div className="card">
-        <div className="card-header" style={{ paddingLeft: "0", paddingRight: "0" }}>
+        <div
+          className="card-header"
+          style={{ paddingLeft: "0", paddingRight: "0" }}
+        >
           <h5 className="mb-2 card-header">Rachunek za zamówienia</h5>
           <div className="card">
-            <ul className="list-group" >
+            <ul className="list-group">
               <li className="list-group-item">Data: {bill.date}r</li>
               <li className="list-group-item">Rozpoczęcie {bill.startTime}</li>
               {bill.endTime ? (
@@ -151,37 +156,44 @@ const BillDetails = () => {
                     <span className="badge bg-success text-light mr-3">
                       Otwarty
                     </span>
-                    <ModalNotification
-                      onConfirm={(e) => handleBill("3")}
-                      buttonColor="warning"
-                      message={
-                        <div>
-                          Czy chcesz poprosić o zamknięcie rachunku? Nie
-                          będziesz mógł dalej zamawiać.
-                          <div class="input-group flex-nowrap mt-4">
-                            <div class="input-group-prepend">
-                              <span
-                                class="input-group-text"
-                                id="addon-wrapping"
-                              >
-                                Jeżeli chcesz zostaw napiwek
-                              </span>
-                            </div>
-                            <input value={tip} onChange={e => handleInputChange(e)} type="number" class="form-control" />
-                            <div class="input-group-append">
-                              <span
-                                class="input-group-text"
-                                id="addon-wrapping"
-                              >
-                                zł
-                              </span>
+                    {bill.items && (
+                      <ModalNotification
+                        onConfirm={(e) => handleBill("3")}
+                        buttonColor="warning"
+                        message={
+                          <div>
+                            Czy chcesz poprosić o zamknięcie rachunku? Nie
+                            będziesz mógł dalej zamawiać.
+                            <div className="input-group flex-nowrap mt-4">
+                              <div className="input-group-prepend">
+                                <span
+                                  className="input-group-text"
+                                  id="addon-wrapping"
+                                >
+                                  Jeżeli chcesz zostaw napiwek
+                                </span>
+                              </div>
+                              <input
+                                value={tip}
+                                onChange={(e) => handleInputChange(e)}
+                                type="number"
+                                className="form-control"
+                              />
+                              <div className="input-group-append">
+                                <span
+                                  className="input-group-text"
+                                  id="addon-wrapping"
+                                >
+                                  zł
+                                </span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      }
-                      small={true}
-                      buttonText="Zamknij Rachunek"
-                    />
+                        }
+                        small={true}
+                        buttonText="Zamknij Rachunek"
+                      />
+                    )}
                   </>
                 )}{" "}
                 {bill.status === "0" && (
@@ -204,34 +216,52 @@ const BillDetails = () => {
                 <th scope="col">Opcje</th>
               </tr>
             </thead>
-            <tbody style={{ padding: "0.2rem", textAlign: "center" }}>{renderBill()}</tbody>
+            <tbody style={{ padding: "0.2rem", textAlign: "center" }}>
+              {renderBill()}
+            </tbody>
           </table>
-          {bill.tip && (<div className="ml-2" style={{ fontSize: "0.9rem" }}>
-            <b>Napiwek: </b>
-            {bill.tip}
-            zł
-          </div>)}
+          {bill.tip && (
+            <div className="ml-2" style={{ fontSize: "0.9rem" }}>
+              <b>Napiwek: </b>
+              {bill.tip}
+              zł
+            </div>
+          )}
 
-          {!bill.items && <span
-            style={{ fontSize: "0.8rem" }}
-            className="alert alert-warning text-dark d-flex justify-content-center align-items-center w-100"
-          >
-            Brak zamówień
-          </span>}
+          {!bill.items && (
+            <span
+              style={{ fontSize: "0.8rem" }}
+              className="alert alert-warning text-dark d-flex justify-content-center align-items-center w-100"
+            >
+              Brak zamówień
+            </span>
+          )}
         </div>
-        <div className="card-footer" >
+        <div className="card-footer">
           <div className="text-right" style={{ fontSize: "1rem" }}>
             <b>Suma: </b>
             {bill.items
               ? objectToArrayWithId(bill.items).reduce(
-                (total, item) => { if (Number(item.status) < 2) { return total + Number(item.price) } else { return total } },
-                (bill.tip ? parseInt(bill.tip) : 0)
-              )
+                  (total, item) => {
+                    if (Number(item.status) < 2) {
+                      return total + Number(item.price);
+                    } else {
+                      return total;
+                    }
+                  },
+                  bill.tip ? parseInt(bill.tip) : 0
+                )
               : 0}
             zł
           </div>
         </div>
       </div>
+      <TokenNotification
+        showNotification={tokenInactive}
+        onClose={() => {
+          setTokenInactive(false);
+        }}
+      />
     </div>
   );
 };

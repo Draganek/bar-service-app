@@ -3,10 +3,11 @@ import axios from "../../../../../axios";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { objectToArrayWithId } from "../../../../../helpers/objects";
 import LoadingIcon from "../../../../../UI/LoadingIcon/LoadingIcon";
-import ModalNotification from "../../../../../components/ModalNotification/ModalNotification";
+import ModalNotification from "../../../../../components/ModalNotificationButton/ModalNotificationButton";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import useAuth from "../../../../../hooks/useAuth";
 import ActualTime from "../../../../../components/ActualTime/ActualTime";
+import TokenNotification from "../../../../../components/TokenNotification/TokenNotification";
 
 const BillService = () => {
   const { id } = useParams();
@@ -15,7 +16,9 @@ const BillService = () => {
   const [waitingDrinks, setWaitingDrinks] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [toastActive, setToastActive] = useState(false);
+  const [tokenInactive, setTokenInactive] = useState(false);
+
+  const stylePadding = {paddingLeft: "1rem", paddingRight: "0"}
 
   const fetchBill = async () => {
     try {
@@ -31,7 +34,6 @@ const BillService = () => {
 
   const handleDrinkStatus = async (drinkId, status) => {
     setLoading(true);
-
     try {
       await axios.patch(
         `/bills/${id}/items/${drinkId}.json?auth=${auth.token}`,
@@ -41,7 +43,7 @@ const BillService = () => {
       );
     } catch (ex) {
       if (ex.response.status === 401) {
-        handleToggleToast();
+        setTokenInactive(true)
       } else {
         setError(ex.message);
       }
@@ -57,7 +59,7 @@ const BillService = () => {
       });
     } catch (ex) {
       if (ex.response.status === 401) {
-        handleToggleToast();
+        setTokenInactive(true)
       } else {
         setError(ex.message);
       }
@@ -72,16 +74,12 @@ const BillService = () => {
       });
     } catch (ex) {
       if (ex.response.status === 401) {
-        handleToggleToast();
+        setTokenInactive(true)
       } else {
         setError(ex.message);
       }
     }
     fetchBill();
-  };
-
-  const handleToggleToast = () => {
-    setToastActive(!toastActive);
   };
 
   useEffect(() => {
@@ -95,25 +93,25 @@ const BillService = () => {
       <div>
         <h4 className="card-header">Rachunek za zamówienia</h4>
         <div className="card">
-          <ul className="list-group ">
-            <li className="list-group-item">
+          <ul className="list-group">
+            <li className="list-group-item" style={stylePadding}>
               <b>Imię użytkownika:</b> {bill.name}
             </li>
-            <li className="list-group-item">
+            <li className="list-group-item" style={stylePadding}>
               <b>Id:</b> {bill.user_id}r
             </li>
-            <li className="list-group-item">
+            <li className="list-group-item" style={stylePadding}>
               <b>Data:</b> {bill.date}r
             </li>
-            <li className="list-group-item">
+            <li className="list-group-item" style={stylePadding}>
               <b>Rozpoczęcie:</b> {bill.startTime}
             </li>
             {bill.endTime ? (
-              <li className="list-group-item">
+              <li className="list-group-item" style={stylePadding}>
                 <b>Zakończenie:</b> {bill.endTime}
               </li>
             ) : null}
-            <li className="list-group-item">
+            <li className="list-group-item" style={stylePadding}>
               {" "}
               <b>Status rachunku:</b>{" "}
               {bill.status === "2" && (
@@ -263,11 +261,6 @@ const BillService = () => {
         ) : (
           <h6 className="m-3 text-center">Nie znaleziono żadnego zamówienia</h6>
         )}
-
-
-
-
-
         <div className="card-footer">
           <div className="text-right mr-3" style={{ fontSize: "1rem" }}>
             <b>Suma: </b>
@@ -281,6 +274,10 @@ const BillService = () => {
           </div>
         </div>
       </div>
+      <TokenNotification
+        showNotification={tokenInactive}
+        onClose={() => { setTokenInactive(false) }}
+      />
     </div>
   );
 };

@@ -109,7 +109,7 @@ export default function Approvals() {
                     onClick={(event) => handleShowBill(bill.id)}
                   >
                     Pokaż{" "}
-                    <span class="badge badge-light">
+                    <span className="badge badge-light">
                       {calculateNotifications(bill)}
                     </span>
                   </button>

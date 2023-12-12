@@ -7,21 +7,19 @@ import ActualDate from "../../components/ActualDate/ActualDate";
 import LoadingButton from "../../UI/LoadingButton/LoadingButton";
 import LoadingIcon from "../../UI/LoadingIcon/LoadingIcon";
 import ActualTime from "../../components/ActualTime/ActualTime";
-import ToastMessage from "../../components/ToastMessage/ToastMessage";
+import TokenNotification from "../../components/TokenNotification/TokenNotification";
 
 export default function Bills() {
   const [loading, setLoading] = useState(true);
   const [auth] = useAuth();
   const [bills, setBills] = useState([]);
   const [error, setError] = useState("");
-  const [toastActive, setToastActive] = useState(false);
+  const [tokenInactive, setTokenInactive] = useState(false);
 
   const fetchBills = async () => {
     try {
       const res = await axios.get("/bills.json");
-      const newData = objectToArrayWithId(res.data).filter(
-        (bill) => bill.user_id === auth.userId
-      );
+      const newData = objectToArrayWithId(res.data).reverse();
       newData.sort((a, b) => b.status - a.status);
       setBills(newData);
     } catch (ex) {
@@ -48,16 +46,12 @@ export default function Bills() {
       fetchBills();
     } catch (ex) {
       if (ex.response.status === 401) {
-        handleToggleToast();
+        setTokenInactive(true)
       } else {
         setError(ex.message);
       }
       setLoading(false);
     }
-  };
-
-  const handleToggleToast = () => {
-    setToastActive(!toastActive);
   };
 
   return loading ? (
@@ -128,7 +122,9 @@ export default function Bills() {
               </tbody>
             </table>
           ) : (
-            <h6>Nie znaleziono żadnego rachunku</h6>
+            <div className="alert alert-warning w-100 text-center" role="alert">
+              <h6>Nie znaleziono żadnego rachunku</h6>
+            </div>
           )}
           {bills.some((bill) => parseInt(bill.status) > 0) ? (
             <span
@@ -147,9 +143,10 @@ export default function Bills() {
             </LoadingButton>
           )}
           {error && <span className="alert alert-danger">{error}</span>}
-          {toastActive && (
-            <ToastMessage isActive={toastActive} onToggle={handleToggleToast} />
-          )}
+          <TokenNotification
+            showNotification={tokenInactive}
+            onClose={() => { setTokenInactive(false) }}
+          />
         </div>
       }
     </>

@@ -3,10 +3,9 @@ import { useEffect, useState } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 import { objectToArrayWithId } from "../../../../helpers/objects";
 import useAuth from "../../../../hooks/useAuth";
-import ModalNotification from "../../../../components/ModalNotification/ModalNotification";
+import ModalNotification from "../../../../components/ModalNotificationButton/ModalNotificationButton";
 import LoadingIcon from "../../../../UI/LoadingIcon/LoadingIcon";
-import ToastMessage from "../../../../components/ToastMessage/ToastMessage";
-import CustomWrap from "../../../../components/CustomWrap/CustomWrap";
+import TokenNotification from "../../../../components/TokenNotification/TokenNotification";
 
 export default function DrinkDatabase() {
   const [auth] = useAuth();
@@ -14,7 +13,7 @@ export default function DrinkDatabase() {
   const [cocktails, setCoctails] = useState([]);
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("");
-  const [toastActive, setToastActive] = useState(false);
+  const [tokenInactive, setTokenInactive] = useState(false);
 
   const fetchDrinks = async () => {
     try {
@@ -33,7 +32,7 @@ export default function DrinkDatabase() {
       setCoctails(cocktails.filter((x) => x.id !== id));
     } catch (ex) {
       if (ex.response.status === 401) {
-        handleToggleToast();
+        setTokenInactive(true)
       } else {
         setError(ex.message);
       }
@@ -45,16 +44,12 @@ export default function DrinkDatabase() {
     fetchDrinks();
   }, []);
 
-  const handleToggleToast = () => {
-    setToastActive(!toastActive);
-  };
-
   return (loading ? <LoadingIcon /> : (
     <div>
       {cocktails.length > 0 ? (
-        <table className="table table-bordered" style={{fontSize: "0.8rem"}}>
+        <table className="table table-bordered" style={{ fontSize: "0.8rem" }}>
           <thead>
-            <tr style={{textAlign: "center"}}>
+            <tr style={{ textAlign: "center" }}>
               <th>Nazwa</th>
               <th>Status</th>
               <th>Cena</th>
@@ -64,18 +59,18 @@ export default function DrinkDatabase() {
           <tbody>
             {cocktails.map((cocktail) => (
               <tr key={cocktail.id}>
-                <td style={{padding: "0", textAlign: "center", verticalAlign: "middle", maxWidth: "7rem"}}>{cocktail.name}</td>
-                <td style={{padding: "0", textAlign: "center", verticalAlign: "middle"}}>
+                <td style={{ padding: "0", textAlign: "center", verticalAlign: "middle", maxWidth: "7rem" }}>{cocktail.name}</td>
+                <td style={{ padding: "0", textAlign: "center", verticalAlign: "middle" }}>
                   {parseInt(cocktail.status) === 1 ? (
-                    <span style={{padding: "0.3rem"}} className="badge bg-success text-light">Aktywny</span>
+                    <span style={{ padding: "0.3rem" }} className="badge bg-success text-light">Aktywny</span>
                   ) : (
-                    <span style={{padding: "0.3rem"}} className="badge bg-secondary text-light">
+                    <span style={{ padding: "0.3rem" }} className="badge bg-secondary text-light">
                       Ukryty
                     </span>
                   )}
                 </td>
-                <td style={{padding: "0", textAlign: "center", verticalAlign: "middle"}}>{cocktail.price}zł</td>
-                <td style={{padding: "0.1rem", textAlign: "center", verticalAlign: "middle"}}>
+                <td style={{ padding: "0", textAlign: "center", verticalAlign: "middle" }}>{cocktail.price}zł</td>
+                <td style={{ padding: "0.1rem", textAlign: "center", verticalAlign: "middle" }}>
                   <Link
                     to={`/services/drinks_database/edytuj/${cocktail.id}`}
                     className="btn btn-sm btn-warning"
@@ -98,14 +93,15 @@ export default function DrinkDatabase() {
         <h6>Nie znaleziono drinków :(</h6>
       )}
       <div className="d-flex align-items-stretch">
-        <Link to={`${url}/dodaj`} className="btn btn-primary" style={{height: '2.5rem'}}>
+        <Link to={`${url}/dodaj`} className="btn btn-primary" style={{ height: '2.5rem' }}>
           Dodaj drink
         </Link>
         <div className="flex-grow-1">
-        {error && <span className="alert alert-danger">{error}</span>}
-        {toastActive && (
-          <ToastMessage isActive={toastActive} onToggle={handleToggleToast} />
-        )}
+          {error && <span className="alert alert-danger">{error}</span>}
+          <TokenNotification
+            showNotification={tokenInactive}
+            onClose={() => { setTokenInactive(false) }}
+          />
         </div>
       </div>
 

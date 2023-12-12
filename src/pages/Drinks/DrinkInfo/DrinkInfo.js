@@ -3,20 +3,21 @@ import { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import { useParams } from "react-router-dom";
 import axios from "../../../axios";
+import ModalNotificationButton from "../../../components/ModalNotificationButton/ModalNotificationButton";
 import ModalNotification from "../../../components/ModalNotification/ModalNotification";
 import LoadingIcon from "../../../UI/LoadingIcon/LoadingIcon";
 import { objectToArrayWithId } from "../../../helpers/objects";
-import ToastMessage from "../../../components/ToastMessage/ToastMessage";
+import TokenNotification from "../../../components/TokenNotification/TokenNotification";
 
 export default function DrinkInfo(props) {
   const { id } = useParams();
-  const [auth] = useAuth();
+  const [auth, setAuth] = useAuth();
   const [activeBill, setActiveBill] = useState([]);
   const [cocktail, setCoctail] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const [toastActive, setToastActive] = useState(false);
+  const [tokenInactive, setTokenInactive] = useState(false);
 
   const fetchDrink = async () => {
     try {
@@ -60,17 +61,13 @@ export default function DrinkInfo(props) {
         );
         setMessage("Pomyślnie dodano drinka do rachunku!");
       } catch (ex) {
-        handleToggleToast();
+        setTokenInactive(true)
       }
 
       fetchBill();
     } else {
       alert("Błąd: Nie masz aktywnego rachunku");
     }
-  };
-
-  const handleToggleToast = () => {
-    setToastActive(!toastActive);
   };
 
   return loading ? (
@@ -230,7 +227,7 @@ export default function DrinkInfo(props) {
         </p>
         {auth && activeBill && (
           <div className="d-flex align-items-stretch">
-            <ModalNotification
+            <ModalNotificationButton
               style={{ fontSize: "0.9rem" }}
               width="100"
               buttonText="Zamów drinka!"
@@ -239,17 +236,21 @@ export default function DrinkInfo(props) {
               buttonColor="primary"
               onConfirm={handleAddToBill}
             />
-            <div className="flex-grow-1 ml-2">
-              {toastActive && (
-                <ToastMessage
-                  isActive={toastActive}
-                  onToggle={handleToggleToast}
-                />
-              )}
-            </div>
           </div>
         )}
       </div>
+      {/* <ModalNotification
+        showNotification={toastActive}
+        onClose={(e) => setToastActive(false)}
+        onConfirm={() => toastActive.logOut()}
+        message={toastActive.message}
+        tittle={toastActive.tittle}
+        confirmation={toastActive.confirmation}
+      /> */}
+      <TokenNotification 
+      showNotification={tokenInactive}
+      onClose={() => {setTokenInactive(false)}}
+      />
     </div>
   );
 }
