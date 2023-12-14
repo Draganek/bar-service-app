@@ -7,6 +7,7 @@ import ModalNotification from "../../../../../components/ModalNotificationButton
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import useAuth from "../../../../../hooks/useAuth";
 import ActualTime from "../../../../../components/ActualTime/ActualTime";
+import ActualDate from "../../../../../components/ActualDate/ActualDate";
 import TokenNotification from "../../../../../components/TokenNotification/TokenNotification";
 
 const BillService = () => {
@@ -71,6 +72,8 @@ const BillService = () => {
     try {
       await axios.patch(`/bills/${id}.json?auth=${auth.token}`, {
         status: status,
+        date: ActualDate(),
+        startTime: ActualTime(),
       });
     } catch (ex) {
       if (ex.response.status === 401) {

@@ -22,7 +22,7 @@ export default function Drinks(props) {
             </NavLink>
           </li>
         </ul>
-        <div className="pt-4" style={location.pathname === "/drinks/random" ? {padding: "1.5rem"} : {padding: "0.3rem"}}>
+        <div className="pt-4" style={location.pathname === "/drinks/random" ? {padding: "2rem"} : {padding: "0.3rem"}}>
           <Switch>
             
             <Route path={`${path}/random`} component={RandomDrink} />

@@ -18,6 +18,7 @@ export default function DrinkInfo(props) {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [tokenInactive, setTokenInactive] = useState(false);
+  const [toastActive, setToastActive] = useState(false);
 
   const fetchDrink = async () => {
     try {
@@ -44,8 +45,23 @@ export default function DrinkInfo(props) {
     fetchBill();
   }, []);
 
+  const isBillActive = async () => {
+    try {
+      const res = await axios.get(`/bills.json`);
+      const bill = objectToArrayWithId(res.data).filter(
+        (bill) => parseInt(bill.status) === 1 && bill.user_id === auth.userId
+      );
+      if (Number(bill.length) > 0){
+        return true
+      }else {
+        return false
+      }
+    } catch (ex) {}
+    return false
+  };
+  
   const handleAddToBill = async (props) => {
-    if (activeBill) {
+    if (await isBillActive()) {
       setLoading(true);
       const items = {
         name: cocktail.name,
@@ -59,14 +75,26 @@ export default function DrinkInfo(props) {
           `/bills/${activeBill.id}/items.json?auth=${auth.token}`,
           items
         );
-        setMessage("Pomyślnie dodano drinka do rachunku!");
+        setToastActive({
+          message: "Pomyślnie dodano drinka do rachunku!",
+          tittle: "Gratulacje",
+          closeButtonColor: "primary",
+          closeButtonMessage: "Świetnie",
+          tittleColor: "success",
+        });
       } catch (ex) {
-        setTokenInactive(true)
+        setTokenInactive(true);
       }
-
       fetchBill();
     } else {
-      alert("Błąd: Nie masz aktywnego rachunku");
+      setToastActive({
+        message: "Nie masz aktywnego rachunku",
+        tittle: "Błąd",
+        closeButtonColor: "primary",
+        closeButtonMessage: "Rozumiem",
+        tittleColor: "danger",
+      });
+      fetchBill();
     }
   };
 
@@ -239,17 +267,21 @@ export default function DrinkInfo(props) {
           </div>
         )}
       </div>
-      {/* <ModalNotification
+      <ModalNotification
         showNotification={toastActive}
         onClose={(e) => setToastActive(false)}
-        onConfirm={() => toastActive.logOut()}
         message={toastActive.message}
         tittle={toastActive.tittle}
+        closeButtonColor={toastActive.closeButtonColor}
+        closeButtonMessage={toastActive.closeButtonMessage}
+        tittleColor={toastActive.tittleColor}
         confirmation={toastActive.confirmation}
-      /> */}
-      <TokenNotification 
-      showNotification={tokenInactive}
-      onClose={() => {setTokenInactive(false)}}
+      />
+      <TokenNotification
+        showNotification={tokenInactive}
+        onClose={() => {
+          setTokenInactive(false);
+        }}
       />
     </div>
   );

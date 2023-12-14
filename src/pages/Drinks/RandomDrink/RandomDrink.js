@@ -97,11 +97,10 @@ export default function RandomDrink(props) {
           </div>
         ) : drawtedDrink ? (
           drawtedDrink && (
-            <div style={{ marginLeft: "3rem", marginRight: "3rem", marginTop: "0.5rem", marginBottom: "0.5rem" }}>
+            <div style={{ marginLeft: "2rem", marginRight: "2rem", marginTop: "0.5rem", marginBottom: "0.5rem" }}>
               <DrinkCard
                 drink={drawtedDrink}
                 link={`/drinks/show/${drawtedDrink.id}`}
-                height="200px"
               />
             </div>
           )

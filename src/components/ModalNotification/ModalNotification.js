@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 
 const ModalNotificationButton = ({
-    showNotification = false,
-    onConfirm,
-    onClose,
-    confirmation = "Potwierdź",
-    cancel = "Anuluj",
-    message,
-    tittle = "Uwaga",
+  showNotification = false,
+  type = "notification",
+  onConfirm,
+  onClose,
+  confirmation = "Potwierdź",
+  closeButtonMessage = "Anuluj",
+  closeButtonColor = "warning",
+  message,
+  tittle = "Uwaga",
+  tittleColor = "danger"
 }) => {
 
   const handleClose = () => onClose();
@@ -22,16 +25,17 @@ const ModalNotificationButton = ({
     <>
       <Modal show={showNotification} onHide={handleClose}>
         <Modal.Header>
-          <Modal.Title className="text-danger">{tittle}</Modal.Title>
+          <Modal.Title className={`text-${tittleColor}`}>{tittle}</Modal.Title>
         </Modal.Header>
         <Modal.Body>{message}</Modal.Body>
         <Modal.Footer>
-          <Button variant="warning" onClick={handleClose}>
-            {cancel}
+          <Button variant={closeButtonColor} onClick={handleClose}>
+            {closeButtonMessage}
           </Button>
-          <Button variant="primary" onClick={handleConfirmation}>
+          {type !== "notification" && (<Button variant="primary" onClick={handleConfirmation}>
             {confirmation}
-          </Button>
+          </Button>)}
+
         </Modal.Footer>
       </Modal>
     </>

@@ -136,7 +136,7 @@ const BillDetails = () => {
           <div className="card">
             <ul className="list-group">
               <li className="list-group-item">Data: {bill.date}r</li>
-              <li className="list-group-item">Rozpoczęcie {bill.startTime}</li>
+              <li className="list-group-item">Rozpoczęcie {bill.startTime ? bill.startTime : "-"}</li>
               {bill.endTime ? (
                 <li className="list-group-item">Zakończenie: {bill.endTime}</li>
               ) : null}

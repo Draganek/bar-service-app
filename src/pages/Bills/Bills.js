@@ -39,7 +39,6 @@ export default function Bills() {
         status: "2",
         name: auth.name,
         date: ActualDate(),
-        startTime: ActualTime(),
         price: 0,
         user_id: auth.userId,
       });
