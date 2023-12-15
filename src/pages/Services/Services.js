@@ -2,6 +2,7 @@ import DrinkDatabase from "./Worker/DrinkDatabase/DrinkDatabase";
 import { Route, Switch, NavLink, useRouteMatch } from 'react-router-dom'
 import Approvals from "../Services/Worker/Approvals/Approvals";
 import useAuth from "../../hooks/useAuth";
+import InfoScripts from "./Worker/InfoScripts/InfoScripts";
 
 export default function Services(props) {
     const { path, url } = useRouteMatch();
@@ -37,12 +38,16 @@ export default function Services(props) {
                     <li className="nav-item">
                         <NavLink className="nav-link" exact to={`${url}/drinks_database`}>Baza</NavLink>
                     </li>
+                    <li className="nav-item">
+                        <NavLink className="nav-link" exact to={`${url}/InfoScripts`}>Informacje</NavLink>
+                    </li>
                 </ul>
                 <div className="pt-3">
 
                     <Switch>
 
                         <Route path={`${path}/drinks_database`} component={DrinkDatabase} />
+                        <Route path={`${path}/InfoScripts`} component={InfoScripts } />
                         <Route path={`${path}`} component={Approvals} />
 
                     </Switch>

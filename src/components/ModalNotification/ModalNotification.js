@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 
-const ModalNotificationButton = ({
+const ModalNotification = ({
   showNotification = false,
   type = "notification",
   onConfirm,
@@ -42,4 +42,4 @@ const ModalNotificationButton = ({
   );
 };
 
-export default ModalNotificationButton;
+export default ModalNotification;
