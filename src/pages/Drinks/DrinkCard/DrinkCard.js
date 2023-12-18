@@ -12,6 +12,7 @@ export default function DrinkCard({ drink, link, style }) {
         className="card-img-top "
         alt="..."
         style={style}
+        
       />
       <h6 className="card-header text-center" style={{padding: "0.5rem"}}>{drink.name}</h6>
       <div style={{fontSize: "0.8rem", padding: "0.5rem"}} className="card-body">
