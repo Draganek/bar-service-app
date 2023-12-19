@@ -37,6 +37,9 @@ export default function AllDrinks(props) {
     if (sorting === "expensive") {
       return cocktails.sort((a, b) => Number(b.price) - Number(a.price));
     }
+    if (sorting === "rating") {
+      return cocktails.sort((a, b) => Number(b.rating) - Number(a.rating));
+    }
     else {
       return cocktails;
     }
@@ -100,6 +103,7 @@ export default function AllDrinks(props) {
           <option value="new">Najnowsze</option>
           <option value="cheap">Najtańsze</option>
           <option value="expensive">Najdroższe</option>
+          <option value="rating">Ranking</option>
         </select>
       </div>
 

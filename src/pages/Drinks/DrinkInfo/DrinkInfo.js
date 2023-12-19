@@ -19,14 +19,23 @@ export default function DrinkInfo(props) {
   const [error, setError] = useState("");
   const [tokenInactive, setTokenInactive] = useState(false);
   const [toastActive, setToastActive] = useState(false);
+  const [rating, setRating] = useState("10");
 
   const fetchDrink = async () => {
     try {
       const res = await axios.get(`/cocktails/${id}.json`);
       setCoctail(res.data);
+      if (auth) {
+        if (res.data.users) {
+          if (res.data.users[auth.userId]) {
+            setRating(res.data.users[auth.userId]);
+          }
+        }
+      }
     } catch (ex) {
       alert(JSON.stringify(ex.response));
     }
+    setLoading(false);
   };
 
   const fetchBill = async () => {
@@ -51,15 +60,15 @@ export default function DrinkInfo(props) {
       const bill = objectToArrayWithId(res.data).filter(
         (bill) => parseInt(bill.status) === 1 && bill.user_id === auth.userId
       );
-      if (Number(bill.length) > 0){
-        return true
-      }else {
-        return false
+      if (Number(bill.length) > 0) {
+        return true;
+      } else {
+        return false;
       }
     } catch (ex) {}
-    return false
+    return false;
   };
-  
+
   const handleAddToBill = async (props) => {
     if (await isBillActive()) {
       setLoading(true);
@@ -98,6 +107,50 @@ export default function DrinkInfo(props) {
     }
   };
 
+  const rateDrink = async () => {
+    setLoading(true);
+    try {
+      await axios.patch(`/cocktails/${id}/users.json?auth=${auth.token}`, {
+        [auth.userId]: rating,
+      });
+      const res = await axios.get(`/cocktails/${id}.json`);
+      const ratings = Object.values(res.data.users);
+      const ratingsSum = ratings.reduce(
+        (sum, ocena) => sum + parseInt(ocena, 10),
+        0
+      );
+      const sredniaOcen = ratingsSum / ratings.length;
+      await axios.patch(`/cocktails/${id}.json?auth=${auth.token}`, {
+        rating:
+          sredniaOcen % 1 === 0
+            ? sredniaOcen.toFixed(0)
+            : sredniaOcen.toFixed(1),
+      });
+      if (Number(rating) >= 5) {
+        setToastActive({
+          message:
+            "Dziękujemy za ocenę drinka. Twoja opinia została wzięta pod uwagę w ogólnej ocenie :D",
+          tittle: "Dziękujemy",
+          closeButtonColor: "primary",
+          closeButtonMessage: "Fajnie",
+          tittleColor: "success",
+        });
+      }else{
+        setToastActive({
+          message: "Dziękujemy za ocenę drinka. Przykro nam że produkt ci nie odpowiada. Postaramy się poprawić :)",
+          tittle: "Dziękujemy",
+          closeButtonColor: "primary",
+          closeButtonMessage: "Fajnie",
+          tittleColor: "success",
+        });
+      }
+
+      fetchDrink();
+    } catch (ex) {
+      setTokenInactive(true);
+    }
+  };
+
   return loading ? (
     <LoadingIcon />
   ) : (
@@ -108,9 +161,7 @@ export default function DrinkInfo(props) {
         style={{ maxWidth: "20rem", objectFit: "cover" }}
         alt="..."
       />
-      <div className="card-header">
-        <h3 className="card-title text-center">{cocktail.name}</h3>
-      </div>
+      <h3 className="card-title text-center card-header">{cocktail.name}</h3>
       <div style={{ fontSize: "0.9rem" }} className="card-body">
         <p className="card-text">
           <b>Opis: </b>
@@ -122,6 +173,50 @@ export default function DrinkInfo(props) {
         style={{ fontSize: "0.9rem" }}
         className="list-group list-group-flush"
       >
+        <li className="list-group-item container">
+          <div className="row">
+            <div
+              className="col"
+              style={{ display: "flex", alignItems: "center" }}
+            >
+              <b>Ocena:&nbsp;</b>
+              {cocktail.rating ? cocktail.rating + "/10" : "Brak ocen"}
+            </div>
+            {auth && (
+              <div className="col input-group">
+                <select
+                  value={rating}
+                  onChange={(e) => setRating(e.target.value)}
+                  className="custom-select ml-4"
+                  style={{ fontSize: "0.8rem" }}
+                >
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                </select>
+                <div className="input-group-append">
+                  <button
+                    className="btn btn-success mr-1"
+                    type="button"
+                    style={{ fontSize: "0.8rem" }}
+                    onClick={() => {
+                      rateDrink();
+                    }}
+                  >
+                    Oceń
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </li>
         {cocktail.alcohols && (
           <li className="list-group-item">
             <span className="card-text">

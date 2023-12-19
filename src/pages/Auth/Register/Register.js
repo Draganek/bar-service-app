@@ -15,19 +15,19 @@ export default function Register(props) {
         value: "",
         error: "",
         showError: "",
-        rules: ["required", { rule: "min", length: 3 }],
+        rules: ["required", { rule: "min", length: 3 }, { rule: "max", length: 12 }],
       },
     email: {
       value: "",
       error: "",
       showError: "",
-      rules: ["required", "email"],
+      rules: ["required", "email", { rule: "max", length: 35 }],
     },
     password: {
       value: "",
       error: "",
       showError: "",
-      rules: ["required", { rule: "min", length: 7 }],
+      rules: ["required", { rule: "min", length: 7 }, { rule: "max", length: 20 }],
     },
   });
 
