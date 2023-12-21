@@ -35,6 +35,8 @@ const EditDrink = (props) => {
         const res = await axios.get(`/cocktails/${id}.json`);
         const drinkData = res.data;
         delete (drinkData.user_id)
+        delete (drinkData.users)
+        delete (drinkData.rating)
         setDrink(drinkData);
     }
 

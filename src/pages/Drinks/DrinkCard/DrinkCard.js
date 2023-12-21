@@ -8,7 +8,7 @@ export default function DrinkCard({ drink, link, style }) {
       className="card"
       style={{ flexBasis: "calc(50% - 0.1rem)", margin: "0.05rem" }}
     >
-      <figure className="position-relative">
+      <figure className="position-relative card-header" style={{padding: "0"}}>
         <img
           src={drink.image}
           className="card-img-top "
@@ -29,7 +29,6 @@ export default function DrinkCard({ drink, link, style }) {
           {drink.rating ? drink.rating : "-"}/10
         </figcaption>
       </figure>
-
       <h6 className="card-header text-center" style={{ padding: "0.5rem" }}>
         {drink.name}
       </h6>

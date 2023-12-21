@@ -178,6 +178,8 @@ const BillDetails = () => {
                                 onChange={(e) => handleInputChange(e)}
                                 type="number"
                                 className="form-control"
+                                min={0}
+                                max={100}
                               />
                               <div className="input-group-append">
                                 <span

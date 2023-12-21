@@ -103,7 +103,7 @@ export default function AllDrinks(props) {
           <option value="new">Najnowsze</option>
           <option value="cheap">Najtańsze</option>
           <option value="expensive">Najdroższe</option>
-          <option value="rating">Ranking</option>
+          <option value="rating">Ocena</option>
         </select>
       </div>
 
