@@ -198,7 +198,11 @@ export default function CustomDrink(props) {
               max="30"
               className="form-control"
             />
+            <div class="input-group-append">
+              <label class="input-group-text">zł</label>
+            </div>
           </div>
+          { (parseInt(drink.price) < 5 || drink.price === "NaN") && (<div style={{padding: "0.5rem"}} className="alert alert-danger text-center mb-0 mt-1">Minimalna cena to 5zł</div>)}
         </li>
       </ul>
 
@@ -256,7 +260,7 @@ export default function CustomDrink(props) {
           <div className="d-flex align-items-stretch">
             <ModalNotificationButton
               style={{ fontSize: "0.9rem" }}
-              disabled={parseInt(drink.price) < 5}
+              disabled={parseInt(drink.price) < 5 || drink.price === "NaN"}
               width="100"
               buttonText="Zamów drinka!"
               confirmation="Oczywiście!"
