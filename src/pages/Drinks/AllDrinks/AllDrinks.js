@@ -38,7 +38,11 @@ export default function AllDrinks(props) {
       return cocktails.sort((a, b) => Number(b.price) - Number(a.price));
     }
     if (sorting === "rating") {
-      return cocktails.sort((a, b) => Number(b.rating) - Number(a.rating));
+      return cocktails.sort((a, b) => {
+        const ratingA = a.rating !== undefined ? Number(a.rating) : 0;
+        const ratingB = b.rating !== undefined ? Number(b.rating) : 0;
+        return ratingB - ratingA;
+      });
     }
     else {
       return cocktails;

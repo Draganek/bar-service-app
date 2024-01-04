@@ -26,7 +26,7 @@ export default function DrinkInfo(props) {
       const res = await axios.get(`/cocktails/${id}.json`);
       setCoctail(res.data);
       if (auth) {
-        if (res.data.users) {
+        if (Number(res.data.users)) {
           if (res.data.users[auth.userId]) {
             setRating(res.data.users[auth.userId]);
           }
@@ -149,6 +149,7 @@ export default function DrinkInfo(props) {
     } catch (ex) {
       setTokenInactive(true);
     }
+    setLoading(false);
   };
 
   return loading ? (
