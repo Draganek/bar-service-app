@@ -6,7 +6,6 @@ import useAuth from "../../hooks/useAuth";
 import ActualDate from "../../components/ActualDate/ActualDate";
 import LoadingButton from "../../UI/LoadingButton/LoadingButton";
 import LoadingIcon from "../../UI/LoadingIcon/LoadingIcon";
-import ActualTime from "../../components/ActualTime/ActualTime";
 import TokenNotification from "../../components/TokenNotification/TokenNotification";
 
 export default function Bills() {
@@ -19,7 +18,7 @@ export default function Bills() {
   const fetchBills = async () => {
     try {
       const res = await axios.get("/bills.json");
-      const newData = objectToArrayWithId(res.data).reverse();
+      const newData = objectToArrayWithId(res.data).filter((bill) => bill.user_id === auth.userId);
       newData.sort((a, b) => b.status - a.status);
       setBills(newData);
     } catch (ex) {
