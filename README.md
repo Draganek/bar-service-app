@@ -72,5 +72,5 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 ## You can visit this app on 
 https://dragan-bar-page.web.app
 
-## Author
+## Author 
 Radosław Draganek
