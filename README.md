@@ -1,4 +1,4 @@
-### Bar Service Web Application
+# Bar Service Web Application
 
 ## Description
 
@@ -6,13 +6,13 @@ The bar management application is a project developed as part of an engineering 
 
 ## Technologies
 
--React
--HTML
--CSS
--JavaScript
--Firebase
--Bootstrap
--Axios
+- React
+- HTML
+- CSS
+- JavaScript
+- Firebase
+- Bootstrap
+- Axios
 
 ## Installation
 
@@ -21,9 +21,9 @@ The bar management application is a project developed as part of an engineering 
 3. Install dependencies: npm install.
 4. Run the project: npm start.
 
-##You can visit this app on
+## You can visit this app on
 
-https://dragan-bar-page.web.app
+### https://dragan-bar-page.web.app
 
 ## Author
-# Radosław Draganek
+### Radosław Draganek
