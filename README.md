@@ -22,7 +22,6 @@ The bar management application is a project developed as part of an engineering 
 4. Run the project: npm start.
 
 ## You can visit this app on
-
 ### https://dragan-bar-page.web.app
 
 ## Author
