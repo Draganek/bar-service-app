@@ -24,5 +24,5 @@ The bar management application is a project developed as part of an engineering 
 ## You can visit this app on
 ### https://dragan-bar-page.web.app
 
-## Author
+## Author:
 ### Radosław Draganek
