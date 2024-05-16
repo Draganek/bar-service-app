@@ -1,6 +1,6 @@
 # Bar Service Web Application
 
-## Description
+## Description.
 
 The bar management application is a project developed as part of an engineering thesis. The goal of the project was to develop a comprehensive system to assist bar management and provide new tools for both staff and customers. The application enables menu management, bill handling, customer feedback collection, and efficient order management.
 
