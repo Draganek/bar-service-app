@@ -62,7 +62,7 @@ export default function RandomDrink(props) {
         drink.type.includes(cocktailsType)
       );
       setCoctails(newCocktails);
-    } else{
+    } else {
       setCoctails(allCocktails)
     }
   };
@@ -75,75 +75,84 @@ export default function RandomDrink(props) {
   return loading ? (
     <LoadingIcon />
   ) : (
-    <div className="card">
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        {loadingDrink ? (
-          <div className="m-5">
-            {
-              <>
-                <div className="text-center">
-                  <h3>Trwa losowanie...</h3>
-                </div>
-                <LoadingIcon color="danger" />
-                <p className="text-center">{text}</p>
-              </>
-            }
-          </div>
-        ) : drawtedDrink ? (
-          drawtedDrink && (
-            <div style={{ marginLeft: "2rem", marginRight: "2rem", marginTop: "0.5rem", marginBottom: "0.5rem" }}>
-              <DrinkCard
-                drink={drawtedDrink}
-                link={`/drinks/show/${drawtedDrink.id}`}
-              />
+    <div className="container my-4">
+      <div className="row justify-content-center">
+        <div className="col-12 col-md-10 col-lg-8 col-xl-6">
+          <div className="card">
+            <div className="card">
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                {loadingDrink ? (
+                  <div className="m-5">
+                    {
+                      <>
+                        <div className="text-center">
+                          <h3>Trwa losowanie...</h3>
+                        </div>
+                        <LoadingIcon color="danger" />
+                        <p className="text-center">{text}</p>
+                      </>
+                    }
+                  </div>
+                ) : drawtedDrink ? (
+                  drawtedDrink && (
+                    <div style={{ marginLeft: "2rem", marginRight: "2rem", marginTop: "0.5rem", marginBottom: "0.5rem" }}>
+                      <DrinkCard
+                        drink={drawtedDrink}
+                        link={`/drinks/show/${drawtedDrink.id}`}
+                      />
+                    </div>
+                  )
+                ) : (
+                  <img
+                    src={randomDrinkImage}
+                    className="card-img-top"
+                    style={{
+                      height: "15rem",
+                      width: "15rem",
+                    }}
+                    alt="..."
+                  />
+                )}
+              </div>
+
+              <div className="card-header">
+                <h4 className="text-center">Losuj pozycje!</h4>
+              </div>
+
+              <ul className="list-group list-group-flush">
+                <select
+                  disabled={loadingDrink}
+                  value={cocktailsType}
+                  onChange={(e) => setCoctailsType(e.target.value)}
+                  className="custom-select text-center"
+                >
+                  <option value="0">Wszystkie</option>
+                  <option value="shot">Shot</option>
+                  <option value="short">Short</option>
+                  <option value="long">Long</option>
+                  <option value="premium">Premium</option>
+                </select>
+              </ul>
+              <div className="card-body">
+                <button
+                  onClick={handleClick}
+                  className="btn btn-primary btn-lg btn-block"
+                  disabled={loadingDrink}
+                >
+                  Losuj!
+                </button>
+              </div>
             </div>
-          )
-        ) : (
-          <img
-            src={randomDrinkImage}
-            className="card-img-top"
-            style={{
-              height: "15rem",
-              width: "15rem",
-            }}
-            alt="..."
-          />
-        )}
-      </div>
-
-      <div className="card-header">
-        <h4 className="text-center">Losuj pozycje!</h4>
-      </div>
-
-      <ul className="list-group list-group-flush">
-        <select
-            disabled={loadingDrink}
-            value={cocktailsType}
-            onChange={(e) => setCoctailsType(e.target.value)}
-            className="custom-select text-center"
-          >
-            <option value="0">Wszystkie</option>
-            <option value="shot">Shot</option>
-            <option value="short">Short</option>
-            <option value="long">Long</option>
-            <option value="premium">Premium</option>
-          </select>
-      </ul>
-      <div className="card-body">
-        <button
-          onClick={handleClick}
-          className="btn btn-primary btn-lg btn-block"
-          disabled={loadingDrink}
-        >
-          Losuj!
-        </button>
+          </div>
+        </div>
       </div>
     </div>
+
   );
 }

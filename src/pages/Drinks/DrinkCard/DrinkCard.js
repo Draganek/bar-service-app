@@ -1,19 +1,20 @@
 import React from "react";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./DrinkCard.module.css";
 
 export default function DrinkCard({ drink, link, style }) {
   return (
-    <div
-      className="card"
-      style={{ flexBasis: "calc(50% - 0.1rem)", margin: "0.05rem" }}
-    >
-      <figure className="position-relative card-header" style={{padding: "0"}}>
+    <div className="card d-flex flex-column h-100">
+      <figure className="position-relative card-header" style={{ padding: "0" }}>
         <img
           src={drink.image}
-          className="card-img-top "
+          className="card-img-top"
           alt={drink.name}
-          style={style}
+          style={{
+            width: "100%",
+            height: "15rem", // ustalona wysokość np. 160px
+            objectFit: "cover",
+          }}
         />
         <figcaption>
           <svg
@@ -29,46 +30,45 @@ export default function DrinkCard({ drink, link, style }) {
           {drink.rating ? drink.rating : "-"}/10
         </figcaption>
       </figure>
+
       <h6 className="card-header text-center" style={{ padding: "0.5rem" }}>
         {drink.name}
       </h6>
-      <div
-        style={{ fontSize: "0.8rem", padding: "0.5rem" }}
-        className="card-body"
-      >
-        {drink.alcohols && (
+
+      <div className="card-body flex-grow-1" style={{ fontSize: "0.8rem", padding: "0.5rem" }}>
+        {drink.alcohols?.length > 0 && (
           <span className="card-text">
             <b>Alkohole: </b>
             {drink.alcohols.map((alcohol, index) => (
               <React.Fragment key={index}>
-                <a>{alcohol.name}</a>
-                {index !== drink.alcohols.length - 1 && <a>, </a>}
+                <span>{alcohol.name}</span>
+                {index !== drink.alcohols.length - 1 && <span>, </span>}
               </React.Fragment>
             ))}
             <br />
           </span>
         )}
 
-        {drink.fillers && (
+        {drink.fillers?.length > 0 && (
           <span className="card-text">
             <b>Napoje: </b>
             {drink.fillers.map((filler, index) => (
               <React.Fragment key={index}>
-                <a>{filler.name}</a>
-                {index !== drink.fillers.length - 1 && <a>, </a>}
+                <span>{filler.name}</span>
+                {index !== drink.fillers.length - 1 && <span>, </span>}
               </React.Fragment>
             ))}
             <br />
           </span>
         )}
 
-        {drink.accessories && (
+        {drink.accessories?.length > 0 && (
           <span className="card-text">
             <b>Dodatki: </b>
             {drink.accessories.map((accessorie, index) => (
               <React.Fragment key={index}>
-                <a>{accessorie.name}</a>
-                {index !== drink.accessories.length - 1 && <a>, </a>}
+                <span>{accessorie.name}</span>
+                {index !== drink.accessories.length - 1 && <span>, </span>}
               </React.Fragment>
             ))}
             <br />
@@ -77,18 +77,19 @@ export default function DrinkCard({ drink, link, style }) {
 
         <span className="card-text">
           <b>Rodzaj: </b>
-          <a>{drink.type}</a>
+          <span>{drink.type}</span>
           <br />
         </span>
       </div>
+
       <div
+        className="card-footer d-flex align-items-center justify-content-between"
         style={{ fontSize: "0.8rem", padding: "0.5rem" }}
-        className="card-footer d-flex"
       >
-        <a style={{ display: "flex", alignItems: "center" }}>
-          <b>Cena:</b>&nbsp;{drink.price}zł
-        </a>
-        <Link className="btn btn-sm btn-primary ml-auto" to={link}>
+        <span>
+          <b>Cena:</b> {drink.price}zł
+        </span>
+        <Link className="btn btn-sm btn-primary" to={link}>
           Pokaż
         </Link>
       </div>

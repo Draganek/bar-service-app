@@ -120,16 +120,19 @@ export default function AllDrinks(props) {
         >
           {cocktails &&
             cocktails.map((drink) => (
+              <div className="col-6 col-md-3 col-lg-2 d-flex flex-column p-0" key={drink.id}>
               <DrinkCard
                 key={drink.id}
                 drink={drink}
                 link={`/drinks/show/${drink.id}`}
                 style={{ height: "10rem", objectFit: "cover" }}
               />
+              </div>
             ))}
           {cocktails.length === 0 && (<div className="alert alert-warning w-100 text-center" role="alert">
             Brak drinków do wyświetlenia
-          </div>)}
+          </div>
+          )}
         </div>
       )}
     </div>
