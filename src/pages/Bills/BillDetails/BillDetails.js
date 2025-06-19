@@ -127,7 +127,7 @@ const BillDetails = () => {
     <LoadingIcon />
   ) : (
     <div style={{ fontSize: "0.9rem" }}>
-      <div className="card">
+      <div className="card col-12 col-md-9 col-lg-7 p-0" style={{margin: 'auto'}}>
         <div
           className="card-header"
           style={{ paddingLeft: "0", paddingRight: "0" }}

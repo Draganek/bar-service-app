@@ -113,11 +113,11 @@ export default function CustomDrink(props) {
   return loading ? (
     <LoadingIcon />
   ) : (
-    <div className="card">
+    <div className="card col-12 col-md-8 col-lg-6" style={{margin: 'auto', padding: 0}}>
       <img
         src={imageCustom}
         className="card-img-top mx-auto border rounded"
-        style={{ maxWidth: "25rem", objectFit: "cover" }}
+        style={{objectFit: "cover" }}
         alt="..."
       />
       <h2

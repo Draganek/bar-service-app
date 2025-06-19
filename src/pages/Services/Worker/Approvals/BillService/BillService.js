@@ -93,7 +93,7 @@ const BillService = () => {
     <LoadingIcon />
   ) : (
     <div style={{ fontSize: "0.9rem" }}>
-      <div>
+      <div className="card col-12 col-md-9 col-lg-7 p-0" style={{margin: 'auto'}}>
         <h4 className="card-header">Rachunek za zamówienia</h4>
         <div className="card">
           <ul className="list-group">

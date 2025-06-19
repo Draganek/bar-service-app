@@ -6,7 +6,6 @@ import Input from "../../../../components/Input/Input";
 import { validate } from "../../../../helpers/validations";
 import { objectToArrayWithId } from "../../../../helpers/objects";
 import LoadingIcon from "../../../../UI/LoadingIcon/LoadingIcon";
-import ToastMessage from "../../../../components/ToastMessage/ToastMessage";
 import TokenNotification from "../../../../components/TokenNotification/TokenNotification";
 
 export default function SetPermissions() {
@@ -82,7 +81,8 @@ export default function SetPermissions() {
   return loading ? (
     <LoadingIcon />
   ) : (
-    <form onSubmit={submit}>
+    <div className="card col-12 col-md-8 col-lg-6" style={{margin: 'auto'}}>
+    <form onSubmit={submit} className="card-body" >
       {message && (
         <div class={`alert ${message.type}`} role="alert">
           {message.value}
@@ -131,5 +131,6 @@ export default function SetPermissions() {
         </div>
       </div>
     </form>
+    </div>
   );
 }

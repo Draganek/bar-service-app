@@ -17,9 +17,9 @@ export default function Home(props) {
   return loading ? (
     <LoadingIcon />
   ) : (
-    <>
+    <div className="col-12 col-md-8 col-lg-6 " style={{margin: 'auto'}}>
       <WhatNew/>
-      <div className="pt-2">
+      <div className="pt-2 ">
         <Alert variant="secondary" className="pt-400">
           <Alert.Heading>Witaj {auth && (<span className="badge badge-secondary">{auth.name}</span>)} w Dragan Bar! </Alert.Heading>
           <p>
@@ -53,6 +53,6 @@ export default function Home(props) {
           </p>
         </Alert>
       </div>
-    </>
+    </div>
   );
 }

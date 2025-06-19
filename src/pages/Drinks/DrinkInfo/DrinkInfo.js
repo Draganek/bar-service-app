@@ -155,11 +155,11 @@ export default function DrinkInfo(props) {
   return loading ? (
     <LoadingIcon />
   ) : (
-    <div className="card">
+    <div className="card col-12 col-md-6 col-lg-4 p-0"style={{margin: 'auto'}}>
       <img
         src={cocktail.image}
         className="card-img-top mx-auto border rounded"
-        style={{ maxWidth: "20rem", objectFit: "cover" }}
+        style={{ objectFit: "cover" }}
         alt="..."
       />
       <h3 className="card-title text-center card-header">{cocktail.name}</h3>
@@ -174,7 +174,7 @@ export default function DrinkInfo(props) {
         style={{ fontSize: "0.9rem" }}
         className="list-group list-group-flush"
       >
-        <li className="list-group-item container">
+        <li className="list-group-item">
           <div className="row">
             <div
               className="col"
@@ -188,7 +188,7 @@ export default function DrinkInfo(props) {
                 <select
                   value={rating}
                   onChange={(e) => setRating(e.target.value)}
-                  className="custom-select ml-4"
+                  className="custom-select ml-3"
                   style={{ fontSize: "0.8rem" }}
                 >
                   <option value="1">1</option>

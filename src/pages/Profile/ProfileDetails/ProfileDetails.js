@@ -77,7 +77,8 @@ export default function ProfileDetails() {
   }, [password]);
 
   return (
-    <form onSubmit={submit}>
+    <div className="card col-12 col-md-8 col-lg-6 p-0" style={{margin: 'auto'}}>
+    <form onSubmit={submit} className="card-body">
       {submitInfo ? (
         <div className={`alert alert-${msg}`}>{submitInfo}</div>
       ) : null}
@@ -122,5 +123,6 @@ export default function ProfileDetails() {
         />
 
     </form>
+    </div>
   );
 }
