@@ -20,6 +20,7 @@ export default function DrinkInfo(props) {
   const [tokenInactive, setTokenInactive] = useState(false);
   const [toastActive, setToastActive] = useState(false);
   const [rating, setRating] = useState("10");
+  const [quantity, setQuantity] = useState(1);
 
   const fetchDrink = async () => {
     try {
@@ -45,7 +46,7 @@ export default function DrinkInfo(props) {
         (bill) => parseInt(bill.status) === 1 && bill.user_id === auth.userId
       );
       setActiveBill(bill[0]);
-    } catch (ex) {}
+    } catch (ex) { }
     setLoading(false);
   };
 
@@ -65,7 +66,7 @@ export default function DrinkInfo(props) {
       } else {
         return false;
       }
-    } catch (ex) {}
+    } catch (ex) { }
     return false;
   };
 
@@ -135,7 +136,7 @@ export default function DrinkInfo(props) {
           closeButtonMessage: "Fajnie",
           tittleColor: "success",
         });
-      }else{
+      } else {
         setToastActive({
           message: "Dziękujemy za ocenę drinka. Przykro nam że produkt ci nie odpowiada. Postaramy się poprawić :)",
           tittle: "Dziękujemy",
@@ -155,7 +156,7 @@ export default function DrinkInfo(props) {
   return loading ? (
     <LoadingIcon />
   ) : (
-    <div className="card col-12 col-md-6 col-lg-4 p-0"style={{margin: 'auto'}}>
+    <div className="card col-12 col-md-6 col-lg-4 p-0" style={{ margin: 'auto' }}>
       <img
         src={cocktail.image}
         className="card-img-top mx-auto border rounded"
@@ -350,13 +351,36 @@ export default function DrinkInfo(props) {
           )}
         </p>
         {auth && activeBill && (
+
           <div className="d-flex align-items-stretch">
             <ModalNotificationButton
               style={{ fontSize: "0.9rem" }}
               width="100"
               buttonText="Zamów drinka!"
               confirmation="Oczywiście!"
-              message={`Czy na pewno chcesz dodać "${cocktail.name}" do rachunku?`}
+              message={
+                <div>Czy na pewno chcesz dodać "{cocktail.name}" do rachunku?
+                  <p className="pt-2">
+                    <b>ilość sztuk: </b>
+                    <select
+                      value={rating}
+                      onChange={(e) => setRating(e.target.value)}
+                      className="custom-select"
+                      style={{ fontSize: "0.8rem" }}
+                    >
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                      <option value="8">8</option>
+                      <option value="9">9</option>
+                      <option value="10">10</option>
+                    </select>
+                  </p>
+                </div>}
               buttonColor="primary"
               onConfirm={handleAddToBill}
             />
@@ -380,5 +404,6 @@ export default function DrinkInfo(props) {
         }}
       />
     </div>
+
   );
 }
