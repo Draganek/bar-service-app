@@ -46,12 +46,12 @@ export default function Approvals() {
       notifications++;
     }
     objectToArrayWithId(bill.items).map(item => {
-      if (item.status === "0" || item.status === "3"){
+      if (item.status === "0" || item.status === "3") {
         notifications++
       }
     })
 
-    if(notifications) {return notifications} else{return ""};
+    if (notifications) { return notifications } else { return "" };
   };
 
   return loading ? (
@@ -61,7 +61,7 @@ export default function Approvals() {
       {bills.length ? (
         <table className="table table-bordered">
           <thead>
-            <tr style={{textAlign: "center"}}>
+            <tr style={{ textAlign: "center" }}>
               <th>Status</th>
               <th>Imię</th>
               <th>Suma</th>
@@ -71,17 +71,17 @@ export default function Approvals() {
           <tbody>
             {bills.map((bill) => (
               <tr key={bill.id}>
-                <td style={{padding: "0.5rem", textAlign: "center", verticalAlign: "middle"}}>
+                <td style={{ padding: "0.5rem", textAlign: "center", verticalAlign: "middle" }}>
                   {bill.status === "3" && (
-                    <span style={{padding: "0.3rem"}} className="badge bg-info text-light">Zamykany</span>
+                    <span style={{ padding: "0.3rem" }} className="badge bg-info text-light">Zamykany</span>
                   )}
                   {bill.status === "2" && (
-                    <span style={{padding: "0.3rem"}} className="badge bg-warning text-light">
+                    <span style={{ padding: "0.3rem" }} className="badge bg-warning text-light">
                       W akceptacji
                     </span>
                   )}
                   {parseInt(bill.status) === 1 && (
-                    <span style={{padding: "0.3rem"}} className="badge bg-success text-light">Otwarty</span>
+                    <span style={{ padding: "0.3rem" }} className="badge bg-success text-light">Otwarty</span>
                   )}{" "}
                   {bill.status === "0" && (
                     <span className="badge bg-secondary text-light">
@@ -90,20 +90,20 @@ export default function Approvals() {
                   )}
                 </td>
                 <td
-                  style={{padding: "0.5rem", textAlign: "center", verticalAlign: "middle"}}
+                  style={{ padding: "0.5rem", textAlign: "center", verticalAlign: "middle" }}
                 >
                   {bill.name}
                 </td>
-                <td style={{padding: "0.5rem", textAlign: "center", verticalAlign: "middle"}}>
+                <td style={{ padding: "0.5rem", textAlign: "center", verticalAlign: "middle" }}>
                   {bill.items
                     ? objectToArrayWithId(bill.items).reduce(
-                        (total, item) => { if (Number(item.status) < 2) { return total + Number(item.price) } else { return total } },
-                        (bill.tip ? parseInt(bill.tip) : 0)
-                      )
+                      (total, item) => { if (Number(item.status) !== 2) { return total + Number(item.price) * (item.quantity ?? 1) } else { return total } },
+                      (bill.tip ? parseInt(bill.tip) : 0)
+                    )
                     : 0}
                   zł
                 </td>
-                <td style={{padding: "0.2rem", textAlign: "center", verticalAlign: "middle"}}>
+                <td style={{ padding: "0.2rem", textAlign: "center", verticalAlign: "middle" }}>
                   <button
                     className="btn btn-sm btn-primary"
                     onClick={(event) => handleShowBill(bill.id)}
@@ -120,8 +120,8 @@ export default function Approvals() {
         </table>
       ) : (
         (<div className="alert alert-warning w-100 text-center" role="alert">
-            <h6>Nie znaleziono aktywnego rachunku</h6>
-          </div>)
+          <h6>Nie znaleziono aktywnego rachunku</h6>
+        </div>)
       )}
       {error && <span className="alert alert-danger">{error}</span>}
       {toastActive && (

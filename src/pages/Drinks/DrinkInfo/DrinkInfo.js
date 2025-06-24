@@ -20,7 +20,7 @@ export default function DrinkInfo(props) {
   const [tokenInactive, setTokenInactive] = useState(false);
   const [toastActive, setToastActive] = useState(false);
   const [rating, setRating] = useState("10");
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState("1");
 
   const fetchDrink = async () => {
     try {
@@ -76,6 +76,7 @@ export default function DrinkInfo(props) {
       const items = {
         name: cocktail.name,
         price: cocktail.price,
+        quantity: quantity,
         status: "3",
         drinkId: id,
         user: auth.userId,
@@ -360,13 +361,15 @@ export default function DrinkInfo(props) {
               confirmation="Oczywiście!"
               message={
                 <div>Czy na pewno chcesz dodać "{cocktail.name}" do rachunku?
-                  <p className="pt-2">
-                    <b>ilość sztuk: </b>
+                  <div class="input-group pt-3 pb-2 w-50">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="quantitySelect">ilość sztuk: </label>
+                    </div>
                     <select
-                      value={rating}
-                      onChange={(e) => setRating(e.target.value)}
+                      value={quantity}
+                      onChange={(e) => setQuantity(e.target.value)}
                       className="custom-select"
-                      style={{ fontSize: "0.8rem" }}
+                      id="quantitySelect"
                     >
                       <option value="1">1</option>
                       <option value="2">2</option>
@@ -379,7 +382,7 @@ export default function DrinkInfo(props) {
                       <option value="9">9</option>
                       <option value="10">10</option>
                     </select>
-                  </p>
+                  </div>
                 </div>}
               buttonColor="primary"
               onConfirm={handleAddToBill}

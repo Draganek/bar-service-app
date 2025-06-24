@@ -19,7 +19,7 @@ const BillService = () => {
   const [error, setError] = useState("");
   const [tokenInactive, setTokenInactive] = useState(false);
 
-  const stylePadding = {paddingLeft: "1rem", paddingRight: "0"}
+  const stylePadding = { paddingLeft: "1rem", paddingRight: "0" }
 
   const fetchBill = async () => {
     try {
@@ -93,7 +93,7 @@ const BillService = () => {
     <LoadingIcon />
   ) : (
     <div style={{ fontSize: "0.9rem" }}>
-      <div className="card col-12 col-md-9 col-lg-7 p-0" style={{margin: 'auto'}}>
+      <div className="card col-12 col-md-9 col-lg-7 p-0" style={{ margin: 'auto' }}>
         <h4 className="card-header">Rachunek za zamówienia</h4>
         <div className="card">
           <ul className="list-group">
@@ -170,6 +170,7 @@ const BillService = () => {
                 <tr style={{ textAlign: "center" }}>
                   <th>Status</th>
                   <th>Drink</th>
+                  <th>Ilość</th>
                   <th>Cena</th>
                   <th>Opcje</th>
                 </tr>
@@ -202,6 +203,7 @@ const BillService = () => {
                     <td style={{ padding: "0.1rem", textAlign: "center", verticalAlign: "middle" }}>
                       {order.name}
                     </td>
+                    <td style={{ padding: "0", textAlign: "center", verticalAlign: "middle" }}>{order.quantity}szt.</td>
                     <td style={{ padding: "0", textAlign: "center", verticalAlign: "middle" }}>{order.price}zł</td>
                     <td style={{ padding: "0.1rem", textAlign: "center" }}>
 
@@ -269,8 +271,14 @@ const BillService = () => {
             <b>Suma: </b>
             {bill.items
               ? objectToArrayWithId(bill.items).reduce(
-                (total, item) => { if (Number(item.status) < 2) { return total + Number(item.price) } else { return total } },
-                (bill.tip ? parseInt(bill.tip) : 0)
+                (total, item) => {
+                  if (Number(item.status) !== 2) {
+                    return total + Number(item.price) * (item.quantity ?? 1);
+                  } else {
+                    return total;
+                  }
+                },
+                bill.tip ? parseInt(bill.tip) : 0
               )
               : 0}
             zł

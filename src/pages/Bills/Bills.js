@@ -96,12 +96,17 @@ export default function Bills() {
                     </td>
                     <td style={{ padding: "0.5rem", textAlign: "center" }}>{bill.date}</td>
                     <td style={{ padding: "0.5rem", textAlign: "center" }}>
-                      {bill.items ? objectToArrayWithId(bill.items).length : 0}
+                      {bill.items
+                        ? objectToArrayWithId(bill.items)
+                          .filter(product => product.status !== "2")
+                          .reduce((sum, product) => sum + parseInt(product.quantity ?? 1), 0)
+                        : 0}
+                      szt.
                     </td>
                     <td style={{ padding: "0.5rem", textAlign: "center" }}>
                       {bill.items
                         ? objectToArrayWithId(bill.items).reduce(
-                          (total, item) => { if (Number(item.status) < 2) { return total + Number(item.price) } else { return total } },
+                          (total, item) => { if (Number(item.status) !== 2) { return total + Number(item.price) * (item.quantity ?? 1) } else { return total } },
                           (bill.tip ? parseInt(bill.tip) : 0)
                         )
                         : 0}

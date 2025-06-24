@@ -58,7 +58,7 @@ const BillDetails = () => {
   const renderBill = (props) => {
     if (bill.items) {
       return objectToArrayWithId(bill.items).map((product, id) => (
-        <tr style={{ fontSize: "0.8rem" }} key={id}>
+        <tr style={{ fontSize: "0.8rem" }} key={id} >
           <th scope="row">{id + 1}</th>
           <td>{product.name}</td>
           {parseInt(product.status) === 0 && (
@@ -81,7 +81,7 @@ const BillDetails = () => {
               <b>W akceptacji</b>
             </td>
           )}
-
+          <td>{product.quantity ?? 1}szt.</td>
           <td>{product.price}zł</td>
           <td style={{ padding: "0.2rem" }}>
             <button
@@ -127,7 +127,7 @@ const BillDetails = () => {
     <LoadingIcon />
   ) : (
     <div style={{ fontSize: "0.9rem" }}>
-      <div className="card col-12 col-md-9 col-lg-7 p-0" style={{margin: 'auto'}}>
+      <div className="card col-12 col-md-9 col-lg-7 p-0" style={{ margin: 'auto' }}>
         <div
           className="card-header"
           style={{ paddingLeft: "0", paddingRight: "0" }}
@@ -210,10 +210,11 @@ const BillDetails = () => {
         <div className="card-body" style={{ padding: "0" }}>
           <table className="table ">
             <thead>
-              <tr style={{ textAlign: "center" }}>
+              <tr style={{ textAlign: "center" }} >
                 <th scope="col">#</th>
                 <th scope="col">Produkt</th>
                 <th scope="col">Status</th>
+                <th scope="col">Ilość</th>
                 <th scope="col">Cena</th>
                 <th scope="col">Opcje</th>
               </tr>
@@ -244,15 +245,15 @@ const BillDetails = () => {
             <b>Suma: </b>
             {bill.items
               ? objectToArrayWithId(bill.items).reduce(
-                  (total, item) => {
-                    if (Number(item.status) < 2) {
-                      return total + Number(item.price);
-                    } else {
-                      return total;
-                    }
-                  },
-                  bill.tip ? parseInt(bill.tip) : 0
-                )
+                (total, item) => {
+                  if (Number(item.status) !== 2) {
+                    return total + Number(item.price) * (item.quantity ?? 1);
+                  } else {
+                    return total;
+                  }
+                },
+                bill.tip ? parseInt(bill.tip) : 0
+              )
               : 0}
             zł
           </div>
