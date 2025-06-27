@@ -12,7 +12,7 @@ export default function DrinkCard({ drink, link, style }) {
           alt={drink.name}
           style={{
             width: "100%",
-            height: "15rem", // ustalona wysokość np. 160px
+            height: "13rem",
             objectFit: "cover",
           }}
         />

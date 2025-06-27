@@ -86,7 +86,7 @@ export default function Register(props) {
   }
 
   return (
-    <div className="card">
+    <div className="card col-12 col-md-8 col-lg-5 d-flex flex-column p-0" style={{margin: "auto"}}>
       <h2 className="card-header">Rejestracja</h2>
       <div className="card-body">
         <p className="text-muted">Uzupełnij dane rejestracji</p>

@@ -125,7 +125,7 @@ export default function AllDrinks(props) {
                 key={drink.id}
                 drink={drink}
                 link={`/drinks/show/${drink.id}`}
-                style={{ height: "10rem", objectFit: "cover" }}
+                style={{ height: "10rem", objectFit: "cover",  }}
               />
               </div>
             ))}
