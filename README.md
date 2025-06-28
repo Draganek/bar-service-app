@@ -45,4 +45,4 @@ Access the live version here:
 ## 👨‍💻 Author
 
 **Radosław Draganek**  
-Feel free to check out more of my work on [GitHub](https://github.com/Draganek) or connect with me on [LinkedIn]([https://www.linkedin.com/in/radosław-draganek-09ab1b26a/](https://www.linkedin.com/in/radosław-draganek-09ab1b26a/)
+Feel free to check out more of my work on [GitHub](https://github.com/Draganek) or connect with me on [LinkedIn](https://www.linkedin.com/in/radosław-draganek-09ab1b26a/)
